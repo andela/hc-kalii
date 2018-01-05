@@ -1,6 +1,7 @@
 # healthchecks
 [![Build Status](https://travis-ci.org/andela/hc-kalii.svg?branch=develop)](https://travis-ci.org/andela/hc-kalii)
 [![Coverage Status](https://coveralls.io/repos/github/andela/hc-kalii/badge.svg?branch=develop&service=github)](https://coveralls.io/github/andela/hc-kalii?branch=develop)
+[![Build Status](https://travis-ci.org/andela/hc-kalii.svg?branch=ch-heroku-configuration-%23154044342)](https://travis-ci.org/andela/hc-kalii)
 
 ![Screenshot of Welcome page](/stuff/screenshots/welcome.png?raw=true "Welcome Page")
 
