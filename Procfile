@@ -1,2 +1,2 @@
-release: pythin manage.py migrate
+release: python manage.py migrate
 web: gunicorn hc.wsgi
