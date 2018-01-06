@@ -1,10 +1,9 @@
 language: python
 python:
   - 3.6
-  - nightly
 install:
   - pip install -r requirements.txt
-  - pip install braintree coveralls mock mysqlclient
+  - pip install braintree coveralls mock 
 env:
   - DB=postgres
 before_script:
