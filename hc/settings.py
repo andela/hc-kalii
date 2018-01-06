@@ -41,6 +41,7 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE = (
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -88,6 +89,10 @@ DATABASES = {
     }
 }
 
+if os.environ.get("Heroku") == 'TRUE':
+    STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+
 # You can switch database engine to postgres or mysql using environment
 # variable 'DB'. Travis CI does this.
 if os.environ.get("DB") == "postgres":
@@ -109,6 +114,11 @@ if os.environ.get("DB") == "mysql":
             'TEST': {'CHARSET': 'UTF8'}
         }
     }
+
+if os.environ.get("Heroku") == 'TRUE':
+    db_from_env = dj_database_url.config()
+    DATABASES['default'].update(db_from_env)
+
 
 LANGUAGE_CODE = 'en-us'
 
