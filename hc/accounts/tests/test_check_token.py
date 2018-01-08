@@ -22,6 +22,15 @@ class CheckTokenTestCase(BaseTestCase):
         self.assertEqual(self.profile.token, "")
 
     ### Login and test it redirects already logged in
+    def test_it_redirects_already_logged_in(self):
+        """Tests if user is already logged in. it redirects him back to login
+        """
+        login = self.client.post("/accounts/check_token/alice/secret-token/")
+        self.assertRedirects(login, "/checks/")
+
+        Already_logged = self.client.get("/") #  check to see if user will be redirected to dashboard
+        self.assertRedirects(Already_logged, "/checks/")
+
 
     ### Login with a bad token and check that it redirects
 
