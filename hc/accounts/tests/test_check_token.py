@@ -36,10 +36,17 @@ class CheckTokenTestCase(BaseTestCase):
     def test_login_with_bad_token(self):
         """
         Test if user will be logged in with bad token
-        :return:  should be false
+        :return:  should not accept
         """
         bad_login = self.client.post("/accounts/check_token/alice/some-radom-token/") #  post with bad token
         self.assertRedirects(bad_login, "/accounts/login/", status_code=302)
 
 
     ### Any other tests?
+    def test_login_with_none_exist_username(self):
+        """
+        Test login with wrong username and see if redirects to login
+        :return: should not accept
+        """
+        #  TODO MAKE TEST FOR NONE EXIST USERNAME
+
