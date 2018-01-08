@@ -6,5 +6,6 @@ hc/local_settings.py
 static-collected
 hc-venv/
 .DS_Store
+htmlconv/
 .idea/
-static/.DS_Store
+.ropeproject/
