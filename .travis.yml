@@ -5,7 +5,7 @@ python:
   - 3.6
 install:
   - pip install -r requirements.txt
-  - pip install braintree coveralls mock 
+  - pip install braintree coveralls mock sqlclient
 env:
   - DB=sqlite
   - DB=mysql
