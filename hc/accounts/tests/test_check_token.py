@@ -28,10 +28,18 @@ class CheckTokenTestCase(BaseTestCase):
         login = self.client.post("/accounts/check_token/alice/secret-token/")
         self.assertRedirects(login, "/checks/")
 
-        Already_logged = self.client.get("/") #  check to see if user will be redirected to dashboard
-        self.assertRedirects(Already_logged, "/checks/")
+        already_logged = self.client.get("/") #  check to see if user will be redirected to dashboard
+        self.assertRedirects(already_logged, "/checks/")
 
 
     ### Login with a bad token and check that it redirects
+    def test_login_with_bad_token(self):
+        """
+        Test if user will be logged in with bad token
+        :return:  should be false
+        """
+        bad_login = self.client.post("/accounts/check_token/alice/some-radom-token/") #  post with bad token
+        self.assertRedirects(bad_login, "/accounts/login/", status_code=302)
+
 
     ### Any other tests?
