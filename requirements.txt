@@ -13,10 +13,7 @@ gunicorn==19.7.1
 lxml==4.1.1
 premailer==2.9.6
 psycopg2==2.7.1
-<<<<<<< HEAD
 rcssmin==1.0.6
-=======
->>>>>>> 87ea9e16299fd8b2d2b1ca6546c2c725a885d4f9
 requests==2.9.1
 rjsmin==1.0.12
 six==1.11.0
