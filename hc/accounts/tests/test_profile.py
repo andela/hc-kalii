@@ -1,3 +1,5 @@
+import re
+
 from django.core import mail
 
 from hc.test import BaseTestCase
@@ -115,12 +117,44 @@ class ProfileTestCase(BaseTestCase):
 
     ### Test it creates and revokes API key
 
-    def test_user_can_revoke_and_create_an_api_key(self):
+    def test_user_can_revoke_api_key(self):
         """
-        User should be able to create an api key after revoking it
+        User should be able to revoke an api
         :return:  True
         """
-        #  TODO: WRITE TESTS FOR CREATING AND DELETING API KEYS
-        pass
+        self.client.login(username="alice@example.org", password="password")
+        api_key = self.alice.profile.api_key
+        self.assertEqual(api_key, 'abc')  # Assert that api key created for alice exists and was set to abc
+
+        form = {"revoke_api_key":""}
+        self.client.post("/accounts/profile/", form)  # Try and revoke the token
+        self.alice.profile.refresh_from_db()  # Refresh db
+        api_key = self.alice.profile.api_key  # Should return an empty string ref: hc/accounts/views.py:150
+        self.assertEqual("", api_key)         # returns True
+
+    def test_user_can_create_api_key(self):
+        """
+        User should be able to create an api after revoking it
+        :return: True
+        """
+        self.client.login(username="alice@example.org", password="password")
+        api_key = self.alice.profile.api_key
+        self.assertEqual(api_key, 'abc')  # Assert that api key created for alice exists and was set to abc
+
+        form = {"revoke_api_key": ""}
+        self.client.post("/accounts/profile/", form)  # Try and revoke the token
+        self.alice.profile.refresh_from_db()  # Refresh db
+        api_key = self.alice.profile.api_key  # Should return an empty string ref: hc/accounts/views.py:150
+        self.assertEqual("", api_key)         # returns True
+
+        #// CREATE AN API KEY AFTER REVOKING IT
+
+        form = {"create_api_key": ""}
+        self.client.post("/accounts/profile/", form)
+        self.alice.profile.refresh_from_db()
+
+        api_key = self.alice.profile.api_key  # This should return a new api key
+        assert api_key  # Returns true if not empty or none exist Else AssertionError
+
 
 
