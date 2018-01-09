@@ -15,3 +15,8 @@ class TeamAccessMiddlewareTestCase(TestCase):
         self.assertEqual(r.status_code, 200)
 
         ### Assert the new Profile objects count
+        self.assertNotIn(str(r), "ned@example.org")  # base.html handles emails and team profiles showing on the top
+                                                     # Since our user does not have any profile
+                                                     # No profile will be loaded for show
+                                                     # And other functionalities that's available but linked to profiles
+                                                     # Although logged in as a user was created into the database
