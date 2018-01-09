@@ -50,4 +50,5 @@ class LoginTestCase(TestCase):
         form = {"email": "I_AM_PRETENDING_TO_BE_AN_EMAIL"}
 
         invalid_email_login = self.client.post("/accounts/login/", form)
-        self.assertTrue(invalid_email_login.status_code, 200)  # returns status code 200 instead of 301/302
+        self.assertEqual(invalid_email_login.status_code, 200)  # returns status code 200 instead of 301/302
+                                                                # Meaning user is not redirected to the checks endpoint

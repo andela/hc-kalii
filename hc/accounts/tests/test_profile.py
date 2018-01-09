@@ -44,14 +44,14 @@ class ProfileTestCase(BaseTestCase):
             member_emails.add(member.user.email)
 
         ### Assert the existence of the member emails
-        assert member_emails  # assert member email exists and is not empty
+        self.assertTrue("bob@example.org" in member_emails)  # assert member email exists with existing team members
         self.assertTrue("frank@example.org" in member_emails)
 
         ###Assert that the email was sent and check email content
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, 'You have been invited to join alice@example.org on healthchecks.io')
         self.assertIn('please open the link below:', str(mail.outbox[0].body),)  # assert email body
-        
+
     def test_add_team_member_checks_team_access_allowed_flag(self):
         self.client.login(username="charlie@example.org", password="password")
 
@@ -114,3 +114,13 @@ class ProfileTestCase(BaseTestCase):
         self.assertNotContains(r, "bobs-tag.svg")
 
     ### Test it creates and revokes API key
+
+    def test_user_can_revoke_and_create_an_api_key(self):
+        """
+        User should be able to create an api key after revoking it
+        :return:  True
+        """
+        #  TODO: WRITE TESTS FOR CREATING AND DELETING API KEYS
+        pass
+
+
