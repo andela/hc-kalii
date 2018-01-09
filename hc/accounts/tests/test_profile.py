@@ -18,7 +18,7 @@ class ProfileTestCase(BaseTestCase):
         self.alice.profile.refresh_from_db()
         token = self.alice.profile.token
         ### Assert that the token is set
-
+        self.assertTrue(token)  # Asserts token should exist
         ### Assert that the email was sent and check email content
 
     def test_it_sends_report(self):
@@ -28,6 +28,9 @@ class ProfileTestCase(BaseTestCase):
         self.alice.profile.send_report()
 
         ###Assert that the email was sent and check email content
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].subject, 'Monthly Report')  # assert mail subject
+        self.assertIn('This is a monthly report sent by healthchecks.io', str(mail.outbox[0].body),)  # assert mail body
 
     def test_it_adds_team_member(self):
         self.client.login(username="alice@example.org", password="password")
@@ -41,11 +44,14 @@ class ProfileTestCase(BaseTestCase):
             member_emails.add(member.user.email)
 
         ### Assert the existence of the member emails
-
+        assert member_emails  # assert member email exists and is not empty
         self.assertTrue("frank@example.org" in member_emails)
 
         ###Assert that the email was sent and check email content
-
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].subject, 'You have been invited to join alice@example.org on healthchecks.io')
+        self.assertIn('please open the link below:', str(mail.outbox[0].body),)  # assert email body
+        
     def test_add_team_member_checks_team_access_allowed_flag(self):
         self.client.login(username="charlie@example.org", password="password")
 
