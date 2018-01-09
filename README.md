@@ -1,4 +1,5 @@
 # healthchecks
+[![Build Status](https://travis-ci.org/andela/hc-kalii.svg?branch=develop)](https://travis-ci.org/andela/hc-kalii)
 
 ![Screenshot of Welcome page](/stuff/screenshots/welcome.png?raw=true "Welcome Page")
 
