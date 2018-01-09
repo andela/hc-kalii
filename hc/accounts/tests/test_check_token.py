@@ -22,8 +22,10 @@ class CheckTokenTestCase(BaseTestCase):
         self.assertEqual(self.profile.token, "")
 
     ### Login and test it redirects already logged in
-    def test_it_redirects_already_logged_in(self):
-        """Tests if user is already logged in. it redirects him back to login
+    def test_it_redirects_already_logged_in_provided_we_do_a_request_with_the_token_again(self):
+        """Tests if user is already logged in. Visiting the token link again
+        should return him to his dashboard
+        :returns: link should be valid as long as user is logged in: True
         """
         login = self.client.post("/accounts/check_token/alice/secret-token/")
         self.assertRedirects(login, "/checks/")
@@ -31,22 +33,30 @@ class CheckTokenTestCase(BaseTestCase):
         already_logged = self.client.get("/") #  check to see if user will be redirected to dashboard
         self.assertRedirects(already_logged, "/checks/")
 
+        login_again = self.client.get("/accounts/check_token/alice/secret-token/") # the same token should work again
+        self.assertRedirects(login_again, "/checks/")
 
     ### Login with a bad token and check that it redirects
-    def test_login_with_bad_token(self):
+    def test_when_a_user_login_with_bad_token(self):
         """
-        Test if user will be logged in with bad token
-        :return:  should not accept
+        Test if user will be logged in with provided that he gave a bad token
+        :return: redirects back to login page
         """
-        bad_login = self.client.post("/accounts/check_token/alice/some-radom-token/") #  post with bad token
-        self.assertRedirects(bad_login, "/accounts/login/", status_code=302)
+        bad_login_token = self.client.post("/accounts/check_token/alice/some-radom-token/") #  post with bad token
+        self.assertRedirects(bad_login_token, "/accounts/login/", status_code=302)
 
 
     ### Any other tests?
-    def test_login_with_none_exist_username(self):
+
+    def test_for_token_should_not_be_valid_once_the_user_logs_out(self):
         """
-        Test login with wrong username and see if redirects to login
-        :return: should not accept
+        Test if a token is reusable after logout
+        :return: authentication should refuse login with previous token
         """
-        #  TODO MAKE TEST FOR NONE EXIST USERNAME
+        login = self.client.post("/accounts/check_token/alice/secret-token/")  # login the user
+        self.assertRedirects(login, "/checks/")
+
+        logout = self.client.get("/accounts/logout/")  #logout user
+        self.assertRedirects(logout, "/", status_code=302)
+
 
