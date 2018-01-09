@@ -9,6 +9,7 @@ django-ses-backend==0.1.1
 djmail==0.11.0
 ez-setup==0.9
 futures==3.0.3
+gunicorn==19.7.1
 lxml==4.1.1
 premailer==2.9.6
 psycopg2==2.7.1
