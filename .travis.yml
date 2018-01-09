@@ -1,11 +1,13 @@
 language: python
 python:
-  - 2.7
-  - 3.4
-  - 3.6
+  - "3.6"
+  - "2.7"
+  - "3.4"
 install:
   - pip install -r requirements.txt
   - pip install braintree coveralls mock mysqlclient
+services:
+  - postgresql
 env:
   - DB=sqlite
   - DB=mysql
