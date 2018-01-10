@@ -21,8 +21,7 @@ class LoginTestCase(TestCase):
         assert create_user.status_code == 302
 
         ### Assert that a user was created
-        assert Profile.objects.select_related("user").get(user__email=form["email"])  # Go to database and retrieve user
-                                                                                      # hc/accounts/backends.py:21
+        assert Profile.objects.select_related("user").get(user__email=form["email"])  # Get user
         # And email sent
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, 'Log in to healthchecks.io')
@@ -39,7 +38,7 @@ class LoginTestCase(TestCase):
         assert "bad_link" not in self.client.session
 
         ### Any other tests?
-    def test_invalid_email_during_login_should_not_be_accepted(self):
+    def test_login_InvalidEmail_ShouldRefuse(self):
         """
         app should not accept an improper email when logging in
         :return: redirect back to the login page
@@ -54,5 +53,4 @@ class LoginTestCase(TestCase):
         form = {"email": "I_AM_PRETENDING_TO_BE_AN_EMAIL"}
 
         invalid_email_login = self.client.post("/accounts/login/", form)
-        self.assertEqual(invalid_email_login.status_code, 200)  # returns status code 200 instead of 301/302
-                                                                # Meaning user is not redirected to the checks endpoint
+        self.assertEqual(invalid_email_login.status_code, 200)  # Return 200: No redirects

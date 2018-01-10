@@ -22,7 +22,7 @@ class CheckTokenTestCase(BaseTestCase):
         self.assertEqual(self.profile.token, "")
 
     ### Login and test it redirects already logged in
-    def test_it_redirects_already_logged_in_provided_we_do_a_request_with_the_token_again(self):
+    def test_login_redirects_already_logged_in(self):
         """Tests if user is already logged in. Visiting the token link again
         should return him to his dashboard
         :returns: link should be valid as long as user is logged in: True
@@ -30,14 +30,14 @@ class CheckTokenTestCase(BaseTestCase):
         login = self.client.post("/accounts/check_token/alice/secret-token/")
         self.assertRedirects(login, "/checks/")
 
-        already_logged = self.client.get("/") #  check to see if user will be redirected to dashboard
+        already_logged = self.client.get("/") # Test redirect to dashboard
         self.assertRedirects(already_logged, "/checks/")
 
-        login_again = self.client.get("/accounts/check_token/alice/secret-token/") # the same token should work again
+        login_again = self.client.get("/accounts/check_token/alice/secret-token/")
         self.assertRedirects(login_again, "/checks/")
 
     ### Login with a bad token and check that it redirects
-    def test_when_a_user_login_with_bad_token(self):
+    def test_login_InvalidToken_ShouldNotAccept(self):
         """
         Test if user will be logged in with provided that he gave a bad token
         :return: redirects back to login page
@@ -48,18 +48,17 @@ class CheckTokenTestCase(BaseTestCase):
 
     ### Any other tests?
 
-    def test_for_token_should_not_be_valid_once_the_user_logs_out(self):
+    def test_login_OneTimeToken_ShouldNotAcceptOnNextLogin(self):
         """
-        Test if a token is reusable after logout
-        :return: authentication should refuse login with previous token
+        A one time login should not be accepted on next login
+        :return: Return redirect back to login
         """
-        login = self.client.post("/accounts/check_token/alice/secret-token/")  # login the user
-        self.assertRedirects(login, "/checks/")
+        self.client.post("/accounts/check_token/alice/secret-token/")  # login
 
-        logout = self.client.get("/accounts/logout/")  #logout user
-        self.assertRedirects(logout, "/", status_code=302)
 
-        login = self.client.post("/accounts/check_token/alice/secret-token/")  # login the user again with the token
-        self.assertRedirects(login, "/accounts/login/")  # The user is redirected back to login page instead of checks
+        self.client.get("/accounts/logout/")  #logout
+
+        login = self.client.post("/accounts/check_token/alice/secret-token/")  # Previous used token
+        self.assertRedirects(login, "/accounts/login/")  # Refuse and Redirect back to login
 
 
