@@ -59,4 +59,7 @@ class CheckTokenTestCase(BaseTestCase):
         logout = self.client.get("/accounts/logout/")  #logout user
         self.assertRedirects(logout, "/", status_code=302)
 
+        login = self.client.post("/accounts/check_token/alice/secret-token/")  # login the user again with the token
+        self.assertRedirects(login, "/accounts/login/")  # The user is redirected back to login page instead of checks
+
 
