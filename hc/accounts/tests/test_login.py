@@ -22,6 +22,7 @@ class LoginTestCase(TestCase):
 
         ### Assert that a user was created
         assert Profile.objects.select_related("user").get(user__email=form["email"])  # Go to database and retrieve user
+                                                                                      # hc/accounts/backends.py:21
         # And email sent
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, 'Log in to healthchecks.io')
