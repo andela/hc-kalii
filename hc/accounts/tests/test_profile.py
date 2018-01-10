@@ -20,7 +20,7 @@ class ProfileTestCase(BaseTestCase):
         self.alice.profile.refresh_from_db()
         token = self.alice.profile.token
         ### Assert that the token is set
-        self.assertTrue(token)  # Asserts token should exist
+        self.assertTrue(token)
         ### Assert that the email was sent and check email content
 
     def test_it_sends_report(self):
@@ -124,13 +124,13 @@ class ProfileTestCase(BaseTestCase):
         """
         self.client.login(username="alice@example.org", password="password")
         api_key = self.alice.profile.api_key
-        self.assertEqual(api_key, 'abc')  # Assert that api key created for alice exists and was set to abc
+        self.assertEqual(api_key, 'abc')  # Assert that api key created
 
         form = {"revoke_api_key":""}
-        self.client.post("/accounts/profile/", form)  # Try and revoke the token
-        self.alice.profile.refresh_from_db()  # Refresh db
-        api_key = self.alice.profile.api_key  # Should return an empty string ref: hc/accounts/views.py:150
-        self.assertEqual("", api_key)         # returns True
+        self.client.post("/accounts/profile/", form)  # revoke the api key
+        self.alice.profile.refresh_from_db()
+        api_key = self.alice.profile.api_key
+        self.assertEqual("", api_key)
 
     def test_user_can_create_api_key(self):
         """
@@ -139,13 +139,13 @@ class ProfileTestCase(BaseTestCase):
         """
         self.client.login(username="alice@example.org", password="password")
         api_key = self.alice.profile.api_key
-        self.assertEqual(api_key, 'abc')  # Assert that api key created for alice exists and was set to abc
+        self.assertEqual(api_key, 'abc')  # Assert that api key created
 
         form = {"revoke_api_key": ""}
-        self.client.post("/accounts/profile/", form)  # Try and revoke the token
-        self.alice.profile.refresh_from_db()  # Refresh db
-        api_key = self.alice.profile.api_key  # Should return an empty string ref: hc/accounts/views.py:150
-        self.assertEqual("", api_key)         # returns True
+        self.client.post("/accounts/profile/", form)  # Try and revoke the api key
+        self.alice.profile.refresh_from_db()
+        api_key = self.alice.profile.api_key  # Should return None
+        self.assertEqual("", api_key)
 
         #// CREATE AN API KEY AFTER REVOKING IT
 
@@ -153,8 +153,8 @@ class ProfileTestCase(BaseTestCase):
         self.client.post("/accounts/profile/", form)
         self.alice.profile.refresh_from_db()
 
-        api_key = self.alice.profile.api_key  # This should return a new api key
-        assert api_key  # Returns true if not empty or none exist Else AssertionError
+        api_key = self.alice.profile.api_key  # should return a new api key
+        assert api_key
 
 
 
