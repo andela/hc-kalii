@@ -14,7 +14,7 @@ class SwitchTeamTestCase(BaseTestCase):
         r = self.client.get(url, follow=True)
 
         ### Assert the contents of r
-        self.assertTrue("This belongs to Alice" not in str(r))  # Alice's personal checks should not appear in team view
+        self.assertContains(r, "This belongs to Alice")  # Alice's check should appear in team view
 
     def test_it_checks_team_membership(self):
         self.client.login(username="charlie@example.org", password="password")
