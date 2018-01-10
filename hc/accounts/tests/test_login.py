@@ -29,6 +29,9 @@ class LoginTestCase(TestCase):
         ### Assert contents of the email body
         self.assertIn("please open the link below", str(mail.outbox[0].body))
         ### Assert that check is associated with the new user
+        user_alice = User.objects.get(email="alice@example.org")
+        check.refresh_from_db()
+        self.assertEqual(check.user, user_alice)
 
     def test_it_pops_bad_link_from_session(self):
         self.client.session["bad_link"] = True
