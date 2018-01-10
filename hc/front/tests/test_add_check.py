@@ -12,3 +12,4 @@ class AddCheckTestCase(BaseTestCase):
         assert Check.objects.count() == 1
 
     ### Test that team access works
+    
