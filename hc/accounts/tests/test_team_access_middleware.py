@@ -16,4 +16,4 @@ class TeamAccessMiddlewareTestCase(TestCase):
 
         ### Assert the new Profile objects count
         profile_created = list(Profile.objects.all())
-        self.assertIn(str(profile_created), "ned@example.org")
+        self.assertIn("ned@example.org", str(profile_created))
