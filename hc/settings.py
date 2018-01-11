@@ -20,7 +20,6 @@ HOST = "localhost"
 SECRET_KEY = "---"
 DEBUG = True
 ALLOWED_HOSTS = []
-DEFAULT_FROM_EMAIL = 'healthchecks@example.org'
 USE_PAYMENTS = False
 
 
@@ -143,8 +142,14 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 COMPRESS_OFFLINE = True
+DEFAULT_FROM_EMAIL = 'healthchecks@gmail.com'
 
 EMAIL_BACKEND = "djmail.backends.default.EmailBackend"
+DJMAIL_REAL_BACKEND = "djmail.backends.smtp.EmailBackend"
+EMAIL_HOST = 'smtp.sparkpostmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "	SMTP_Injection"
+EMAIL_HOST_PASSWORD = "fc9fec94ebfa139322ec6c2a373a324a7816339a"
 
 # Slack integration -- override these in local_settings
 SLACK_CLIENT_ID = None
