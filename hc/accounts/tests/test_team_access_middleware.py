@@ -15,4 +15,5 @@ class TeamAccessMiddlewareTestCase(TestCase):
         self.assertEqual(r.status_code, 200)
 
         ### Assert the new Profile objects count
-        self.assertNotIn(str(r), "ned@example.org")  # Profile ned should not exist
+        profile_created = list(Profile.objects.all())
+        self.assertIn(str(profile_created), "ned@example.org")
