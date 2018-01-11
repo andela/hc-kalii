@@ -1,9 +1,6 @@
 from django.test.utils import override_settings
 from hc.api.models import Channel
-from hc.test import BaseTestCase
-
-
-@override_settings(PUSHOVER_API_TOKEN="token", PUSHOVER_SUBSCRIPTION_URL="url")
+from hc.test import BaseTestCase@override_settings(PUSHOVER_API_TOKEN="token", PUSHOVER_SUBSCRIPTION_URL="url")
 class AddPushoverTestCase(BaseTestCase):
     def test_it_adds_channel(self):
         self.client.login(username="alice@example.org", password="password")
@@ -38,3 +35,20 @@ class AddPushoverTestCase(BaseTestCase):
         assert r.status_code == 403
 
     ### Test that pushover validates priority
+    def test_pushover_validates(self):
+        self.client.login(username="alice@example.org", password="password")
+
+        session = self.client.session
+        session["po_nonce"] = "n"
+        session.save()
+        
+        # set invalid priority of  6. This should fail because
+        # 6 not in the priority list
+        params = "pushover_user_key=a&nonce=n&prio=6"
+        r = self.client.get("/integrations/add_pushover/?%s" % params)
+        print(r.status_code)
+        assert r.status_code == 400
+
+
+        
+    
