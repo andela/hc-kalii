@@ -1,6 +1,8 @@
 from django.test.utils import override_settings
 from hc.api.models import Channel
-from hc.test import BaseTestCase@override_settings(PUSHOVER_API_TOKEN="token", PUSHOVER_SUBSCRIPTION_URL="url")
+from hc.test import BaseTestCase
+
+@override_settings(PUSHOVER_API_TOKEN="token", PUSHOVER_SUBSCRIPTION_URL="url")
 class AddPushoverTestCase(BaseTestCase):
     def test_it_adds_channel(self):
         self.client.login(username="alice@example.org", password="password")
