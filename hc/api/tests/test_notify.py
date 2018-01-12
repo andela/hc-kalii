@@ -231,22 +231,4 @@ class NotifyTestCase(BaseTestCase):
         self.channel.notify(self.check)
         n = Notification.objects.get()
         self.assertEqual(n.error, "Received status code 500")
-    #reference points 
-    # self._setup_data("slack", "123")
-    #     mock_post.return_value.status_code = 500
-
-    #     self.channel.notify(self.check)
-
-    #     n = Notification.objects.get()
-    #     self.assertEqual(n.error, "Received status code 500")
-
-    #reference point 2
-    # def test_webhook(self, mock_get):
-    #     self._setup_data("webhook", "http://example")
-    #     mock_get.return_value.status_code = 200
-
-    #     self.channel.notify(self.check)
-    #     mock_get.assert_called_with(
-    #         "get", u"http://example",
-    #         headers={"User-Agent": "healthchecks.io"}, timeout=5)
     
