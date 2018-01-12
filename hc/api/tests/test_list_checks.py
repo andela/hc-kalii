@@ -89,3 +89,4 @@ class ListChecksTestCase(BaseTestCase):
     def test_it_accepts_apiKey_in_request(self):
         r = self.get()
         self.assertEqual(r.status_code, 200)
+
