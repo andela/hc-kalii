@@ -54,7 +54,6 @@ class CreateCheckTestCase(BaseTestCase):
 
         ### Make the post request and get the response
         r = self.post({"api_key": "abc"})
-        ### r = {'status_code': 201} ### This is just a placeholder variable
         self.assertEqual(r.status_code, 201)
 
     def test_it_handles_missing_request_body(self):
