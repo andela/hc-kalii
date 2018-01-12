@@ -1,6 +1,6 @@
-from django.test.utils import override_settings
 from django.contrib.auth.models import User
-from hc.api.models import Channel, Ping
+from django.test.utils import override_settings
+from hc.api.models import Channel
 from hc.test import BaseTestCase
 
 
@@ -32,7 +32,7 @@ class AddChannelTestCase(BaseTestCase):
             r = self.client.get(url)
             self.assertContains(r, "Integration Settings", status_code=200)
 
-    ## Test that the team access works
+    # Test that the team access works
     def test_team_access_works(self):
         url = "/integrations/add/"
         form = {"kind": "email"}
@@ -47,7 +47,7 @@ class AddChannelTestCase(BaseTestCase):
         # Charlie is not part of the team so he should have no Channel
         self.assertEquals(Channel.objects.filter(user=user_charlie).count(), 0)
 
-    ### Test that bad kinds don't work
+    # Test that bad kinds don't work
     def test_bad_kinds_dont_work(self):
         url = "/integrations/add/"
         form = {"kind": "bad_kind", "value": "alice@example.org"}
