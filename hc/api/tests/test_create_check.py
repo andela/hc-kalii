@@ -58,7 +58,7 @@ class CreateCheckTestCase(BaseTestCase):
 
     def test_it_handles_missing_request_body(self):
         ### Make the post request with a missing body and get the response
-        r = self.post({})
+        r = self.post({}, expected_error="wrong api_key")
         self.assertEqual(r.status_code, 400)
         self.assertEqual(r.json()['error'], 'wrong api_key')
 
