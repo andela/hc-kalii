@@ -38,8 +38,8 @@ class ProfileTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
 
         form = {"invite_team_member": "1", "email": "frank@example.org"}
-        r = self.client.post("/accounts/profile/", form)
-        assert r.status_code == 200
+        invitation = self.client.post("/accounts/profile/", form)
+        assert invitation.status_code == 200
 
         member_emails = set()
         for member in self.alice.profile.member_set.all():
@@ -58,8 +58,8 @@ class ProfileTestCase(BaseTestCase):
         self.client.login(username="charlie@example.org", password="password")
 
         form = {"invite_team_member": "1", "email": "frank@example.org"}
-        r = self.client.post("/accounts/profile/", form)
-        assert r.status_code == 403
+        invitation = self.client.post("/accounts/profile/", form)
+        assert invitation.status_code == 403
 
     def test_it_removes_team_member(self):
         self.client.login(username="alice@example.org", password="password")
@@ -77,8 +77,8 @@ class ProfileTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
 
         form = {"set_team_name": "1", "team_name": "Alpha Team"}
-        r = self.client.post("/accounts/profile/", form)
-        assert r.status_code == 200
+        team_name = self.client.post("/accounts/profile/", form)
+        assert team_name.status_code == 200
 
         self.alice.profile.refresh_from_db()
         self.assertEqual(self.alice.profile.team_name, "Alpha Team")
@@ -87,8 +87,8 @@ class ProfileTestCase(BaseTestCase):
         self.client.login(username="charlie@example.org", password="password")
 
         form = {"set_team_name": "1", "team_name": "Charlies Team"}
-        r = self.client.post("/accounts/profile/", form)
-        assert r.status_code == 403
+        team_name = self.client.post("/accounts/profile/", form)
+        assert team_name.status_code == 403
 
     def test_it_switches_to_own_team(self):
         self.client.login(username="bob@example.org", password="password")
@@ -105,15 +105,15 @@ class ProfileTestCase(BaseTestCase):
         Check.objects.create(user=self.alice, tags="foo a-B_1  baz@")
         Check.objects.create(user=self.bob, tags="bobs-tag")
 
-        r = self.client.get("/accounts/profile/")
-        self.assertContains(r, "foo.svg")
-        self.assertContains(r, "a-B_1.svg")
+        badge = self.client.get("/accounts/profile/")
+        self.assertContains(badge, "foo.svg")
+        self.assertContains(badge, "a-B_1.svg")
 
         # Expect badge URLs only for tags that match \w+
-        self.assertNotContains(r, "baz@.svg")
+        self.assertNotContains(badge, "baz@.svg")
 
         # Expect only Alice's tags
-        self.assertNotContains(r, "bobs-tag.svg")
+        self.assertNotContains(badge, "bobs-tag.svg")
 
     ### Test it creates and revokes API key
 

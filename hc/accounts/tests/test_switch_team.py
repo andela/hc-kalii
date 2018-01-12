@@ -20,9 +20,9 @@ class SwitchTeamTestCase(BaseTestCase):
         self.client.login(username="charlie@example.org", password="password")
 
         url = "/accounts/switch_team/%s/" % self.alice.username
-        r = self.client.get(url)
+        forbidden = self.client.get(url)
         ### Assert the expected error code
-        self.assertEqual(403, r.status_code)  # should return 403 forbidden for Charlie
+        self.assertEqual(403, forbidden.status_code)  # should return 403 forbidden for Charlie
 
     def test_it_switches_to_own_team(self):
         self.client.login(username="alice@example.org", password="password")
