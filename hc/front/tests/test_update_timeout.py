@@ -70,9 +70,9 @@ class UpdateTimeoutTestCase(BaseTestCase):
         assert check.timeout.total_seconds() == 3600
         assert check.grace.total_seconds() == 60
 
-    def test_longer_timeout_grace_periods(self):
+    def test_longer_timeouts_grace_periods(self):
         """
-        Test that user can be able to set timeout and grace periods of longer than 30 days
+        Test that user can be able to set timeouts and grace periods of longer than 30 days
         """
         url = "/checks/%s/timeout/" % self.check.code
         payload = {"timeout": 7776000, "grace": 7776000}
