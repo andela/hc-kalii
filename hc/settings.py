@@ -51,6 +51,7 @@ MIDDLEWARE = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'hc.accounts.middleware.TeamAccessMiddleware',
+    'hc.front.middleware.UnresolvedChecksMiddleware'
 )
 
 AUTHENTICATION_BACKENDS = (
