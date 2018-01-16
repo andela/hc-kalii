@@ -4,10 +4,10 @@ from datetime import timedelta
 from django.utils import timezone
 
 
-class MyChecksTestCase(BaseTestCase):
+class MyFailedChecksTestCase(BaseTestCase):
 
     def setUp(self):
-        super().setUp()
+        super(MyFailedChecksTestCase, self).setUp()
         self.check = Check(user=self.alice, name="Failing checks")
         self.check.last_ping = timezone.now() - timedelta(days=3)
         self.check.status = "up"
