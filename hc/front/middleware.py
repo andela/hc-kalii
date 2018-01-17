@@ -19,7 +19,8 @@ class UnresolvedChecksMiddleware:
                 except TypeError:  # Raises type error if check is NoneType
                     continue
                 else:
-                    failed.append(check)
+                    if check.get_status() is "down":
+                        failed.append(check)
             if failed:
                 request.has_unresolved_checks = True
                 request.number_of_unresolved = len(failed)
