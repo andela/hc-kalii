@@ -14,15 +14,15 @@ class AddCheckTestCase(BaseTestCase):
 
     ### Test that team access works
     def test_team_access_works(self):
-        url="/checks/add/"
-        #Bob logs in and adds a new check. Bob is on the team
-        self.client.login(username="bob@example.org", password="password")
-        self.client.post(url)
+        check = Check(user=self.alice, name="Team check")
+        check.save()
+        for email in ("alice@example.org", "bob@example.org"):
+            self.client.login(username=email, password="password")
+            dashboard = self.client.get("/checks/")
+            self.assertContains(dashboard, "Team check")
 
-        # Charlie logins and attempts to add a new check, charlie has no team access
-        self.client.login(username="charlie@example.org", password="password")
-        self.client.post(url)
 
-        user_alice = User.objects.get(email="alice@example.org")
-        #Alice can access the team's check since she is also on the team
-        assert Check.objects.filter(user=user_alice).count() == 1
+
+        
+
+    
