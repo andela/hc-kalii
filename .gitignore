@@ -5,7 +5,9 @@ hc.sqlite
 hc/local_settings.py
 static-collected
 hc-venv/
+*.venv
 .DS_Store
 htmlconv/
 .idea/
 .ropeproject/
+.vscode/
