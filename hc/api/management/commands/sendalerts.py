@@ -50,8 +50,7 @@ class Command(BaseCommand):
         if check.status == "down":
             check.nag_after = (timezone.now() + check.interval)
             check.nag_status = True
-            print("THIs works" + str(check.nag_after))
-        check.save()
+            check.save()
 
         tmpl = "\nSending alert, status=%s, code=%s\n"
         self.stdout.write(tmpl % (check.status, check.code))
