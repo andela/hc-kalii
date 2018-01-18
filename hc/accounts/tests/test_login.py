@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.core import mail
 from django.test import TestCase
 from hc.api.models import Check
+from hc.accounts.models import Profile
 
 
 class LoginTestCase(TestCase):
@@ -16,17 +17,20 @@ class LoginTestCase(TestCase):
 
         form = {"email": "alice@example.org"}
 
-        r = self.client.post("/accounts/login/", form)
-        assert r.status_code == 302
+        create_user = self.client.post("/accounts/login/", form)
+        assert create_user.status_code == 302
 
         ### Assert that a user was created
-
+        assert Profile.objects.select_related("user").get(user__email=form["email"])  # Get user
         # And email sent
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, 'Log in to healthchecks.io')
         ### Assert contents of the email body
-
+        self.assertIn("please open the link below", str(mail.outbox[0].body))
         ### Assert that check is associated with the new user
+        user_alice = User.objects.get(email="alice@example.org")
+        check.refresh_from_db()
+        self.assertEqual(check.user, user_alice)
 
     def test_it_pops_bad_link_from_session(self):
         self.client.session["bad_link"] = True
@@ -34,4 +38,19 @@ class LoginTestCase(TestCase):
         assert "bad_link" not in self.client.session
 
         ### Any other tests?
+    def test_login_InvalidEmail_ShouldRefuse(self):
+        """
+        app should not accept an improper email when logging in
+        :return: redirect back to the login page
+        """
+        check = Check()
+        check.save()
 
+        session = self.client.session
+        session["welcome_code"] = str(check.code)
+        session.save()
+
+        form = {"email": "I_AM_PRETENDING_TO_BE_AN_EMAIL"}
+
+        invalid_email_login = self.client.post("/accounts/login/", form)
+        self.assertEqual(invalid_email_login.status_code, 200)  # Return 200: No redirects

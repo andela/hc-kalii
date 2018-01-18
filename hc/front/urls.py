@@ -29,6 +29,7 @@ channel_urls = [
 ]
 
 urlpatterns = [
+    url(r'^failed_checks/$', views.failed_checks, name="hc-failed-checks"),
     url(r'^$', views.index, name="hc-index"),
     url(r'^checks/$', views.my_checks, name="hc-checks"),
     url(r'^checks/add/$', views.add_check, name="hc-add-check"),
