@@ -21,11 +21,11 @@ class TimeoutForm(forms.Form):
     """
     User can set desired timeout and grace values
     Minimun: 60 seconds (1 minute)
-    Maximum: 31536000 seconds (365 days)
+    Maximum: 7776000 seconds (90 days)
     """
 
-    timeout = forms.IntegerField(min_value=60, max_value=31536000)
-    grace = forms.IntegerField(min_value=60, max_value=31536000)
+    timeout = forms.IntegerField(min_value=60, max_value=7776000)
+    grace = forms.IntegerField(min_value=60, max_value=7776000)
 
 
 class AddChannelForm(forms.ModelForm):
