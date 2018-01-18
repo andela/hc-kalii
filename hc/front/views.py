@@ -26,12 +26,19 @@ def pairwise(iterable):
     next(b, None)
     return zip(a, b)
 
+def my_checks_helper(request):
+    """
+    Helper function for getting checks and failed checks
+    :param request: Http request
+    :return: all_checks, failed_checks
+    """
+    all_checks = list(Check.objects.filter(user=request.team.user).order_by("created"))
+    failed = [check for check in all_checks if check.get_status() is "down"]
+    return all_checks, failed
 
 @login_required
 def my_checks(request):
-    q = Check.objects.filter(user=request.team.user).order_by("created")
-    checks = list(q)
-
+    checks = my_checks_helper(request)[0]
     counter = Counter()
     down_tags, grace_tags = set(), set()
     for check in checks:
@@ -59,7 +66,29 @@ def my_checks(request):
 
     return render(request, "front/my_checks.html", ctx)
 
+@login_required
+def failed_checks(request):
+    all_checks, failed = my_checks_helper(request)
+    counter = Counter()
+    down_tags = set()
+    for check in all_checks:
+        status = check.get_status()
+        for tag in check.tags_list():
+            if not tag: continue
+            counter[tag] += 1
+            if status is "down": down_tags.add(tag)
 
+    ctx = {
+        "page": "failed_checks",
+        "checks": failed,
+        "now": timezone.now(),
+        "tags": counter.most_common(),
+        "down_tags": down_tags,
+        "ping_endpoint": settings.PING_ENDPOINT
+    }
+    if not failed:
+        return redirect('hc-checks')
+    return render(request, "front/my_checks.html", ctx)
 def _welcome_check(request):
     check = None
     if "welcome_code" in request.session:
@@ -92,7 +121,6 @@ def index(request):
 
 def docs(request):
     check = _welcome_check(request)
-
     ctx = {
         "page": "docs",
         "section": "home",
@@ -118,7 +146,10 @@ def docs_api(request):
 
 
 def about(request):
-    return render(request, "front/about.html", {"page": "about"})
+    ctx = {
+        "page": "about",
+    }
+    return render(request, "front/about.html", ctx)
 
 
 @login_required
