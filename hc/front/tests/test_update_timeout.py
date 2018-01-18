@@ -58,18 +58,6 @@ class UpdateTimeoutTestCase(BaseTestCase):
         r = self.client.post(url, data=payload)
         assert r.status_code == 403
 
-    def test_it_works(self):
-        url = "/checks/%s/timeout/" % self.check.code
-        payload = {"timeout": 3600, "grace": 60}
-
-        self.client.login(username="alice@example.org", password="password")
-        r = self.client.post(url, data=payload)
-        self.assertRedirects(r, "/checks/")
-
-        check = Check.objects.get(code=self.check.code)
-        assert check.timeout.total_seconds() == 3600
-        assert check.grace.total_seconds() == 60
-
     def test_longer_timeouts_grace_periods(self):
         """
         Test that user can be able to set timeouts and grace periods of longer than 30 days
