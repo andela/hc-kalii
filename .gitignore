@@ -11,3 +11,4 @@ htmlconv/
 .idea/
 .ropeproject/
 .vscode/
+.env
