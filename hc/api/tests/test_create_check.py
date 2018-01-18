@@ -80,5 +80,26 @@ class CreateCheckTestCase(BaseTestCase):
         self.post({"api_key": "abc", "name": False},
                   expected_error="name is not a string")
 
-    ### Test for the assignment of channels
-    ### Test for the 'timeout is too small' and 'timeout is too large' errors
+    def test_it_rejects_small_timeout(self):
+        ### Test for small timeout
+        self.post({"api_key": "abc", "timeout": 40},
+                  expected_error="timeout is too small")
+
+    def test_it_rejects_large_timeout(self):
+        ### Test for large timeout
+        self.post({"api_key": "abc", "timeout": 90077567846},
+                  expected_error="timeout is too large")
+
+    def test_it_assigns_channels(self):
+        ### Test for the assignment of channels
+        channel = Channel(user=self.alice)
+        channel.kind = "slack"
+        channel.save()
+        self.post({
+            "api_key": "abc",
+            "name": "Foo",
+            'channels': "*"
+        })
+
+        check = Check.objects.get(name='Foo')
+        self.assertTrue(check.channel_set.filter(kind='slack').exists())
