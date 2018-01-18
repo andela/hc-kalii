@@ -84,8 +84,11 @@ TEST_RUNNER = 'hc.api.tests.CustomRunner'
 # install requirements.txt and do manage.py runserver and it works
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME':   './hc.sqlite',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME':   'hc',
+        'USER':   'philophilo',
+        'PASSWORD': 'philophilo',
+        'TEST':   {'CHARSET': 'UTF8'}
     }
 }
 
@@ -131,6 +134,9 @@ USE_L10N = True
 USE_TZ = True
 
 SITE_ROOT = "http://localhost:8000"
+SITE_NAME = "Health Checks"
+DEFAULT_FROM_EMAIL = "healthchecks@gmail.com"
+
 PING_ENDPOINT = SITE_ROOT + "/ping/"
 PING_EMAIL_DOMAIN = HOST
 STATIC_URL = '/static/'
@@ -142,14 +148,15 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 COMPRESS_OFFLINE = True
-DEFAULT_FROM_EMAIL = 'healthchecks@gmail.com'
 
 EMAIL_BACKEND = "djmail.backends.default.EmailBackend"
-DJMAIL_REAL_BACKEND = "djmail.backends.smtp.EmailBackend"
-EMAIL_HOST = 'smtp.sparkpostmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = "	SMTP_Injection"
-EMAIL_HOST_PASSWORD = "fc9fec94ebfa139322ec6c2a373a324a7816339a"
+DJMAIL_REAL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# Email
+EMAIL_HOST = os.environ['EMAIL_HOST']
+EMAIL_PORT = os.environ['EMAIL_PORT']
+EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+EMAIL_USE_TLS = os.environ['EMAIL_USE_TLS']
 
 # Slack integration -- override these in local_settings
 SLACK_CLIENT_ID = None
