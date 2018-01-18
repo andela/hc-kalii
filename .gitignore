@@ -1,5 +1,6 @@
 __pycache__/
 *.pyc
+.env
 .coverage
 hc.sqlite
 hc/local_settings.py
