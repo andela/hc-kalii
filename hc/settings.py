@@ -150,8 +150,8 @@ DJMAIL_REAL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 # Email
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'hckalii2018@gmail.com'
-EMAIL_HOST_PASSWORD = 'HcKalii1!'
+EMAIL_HOST_USER = os.environ.get('MAIL_USERNAME')
+EMAIL_HOST_PASSWORD = os.environ.get('MAIL_PASSWORD')
 EMAIL_USE_TLS = True
 
 
