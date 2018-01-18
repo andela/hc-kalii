@@ -9,3 +9,4 @@ hc-venv/
 htmlconv/
 .idea/
 .ropeproject/
+.vscode/

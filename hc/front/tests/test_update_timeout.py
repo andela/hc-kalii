@@ -18,6 +18,7 @@ class UpdateTimeoutTestCase(BaseTestCase):
         self.assertRedirects(r, "/checks/")
 
         check = Check.objects.get(code=self.check.code)
+        print('@@@@@@@@@@@@@@@@@@@',check.timeout.total_seconds())
         assert check.timeout.total_seconds() == 3600
         assert check.grace.total_seconds() == 60
 

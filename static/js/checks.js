@@ -88,6 +88,37 @@ $(function () {
     });
 
 
+    var intervalSlider = document.getElementById("interval-slider");
+    noUiSlider.create(intervalSlider, {
+        start: [20],
+        connect: "lower",
+        range: {
+            'min': [60, 60],
+            '33%': [3600, 3600],
+            '66%': [86400, 86400],
+            '83%': [604800, 604800],
+            'max': 2592000
+        },
+        pips: {
+            mode: 'values',
+            values: [60, 1800, 3600, 43200, 86400, 604800, 2592000],
+            density: 4,
+            format: {
+                to: secsToText,
+                from: function () {
+                }
+            }
+        }
+    });
+
+    intervalSlider.noUiSlider.on("update", function (a, b, value) {
+        var rounded = Math.round(value);
+        $("#interval-slider-value").text(secsToText(rounded));
+        $("#update-timeout-interval").val(rounded);
+    });
+
+
+
     $('[data-toggle="tooltip"]').tooltip();
 
     $(".my-checks-name").click(function() {
@@ -106,8 +137,9 @@ $(function () {
         var $this = $(this);
 
         $("#update-timeout-form").attr("action", $this.data("url"));
-        periodSlider.noUiSlider.set($this.data("timeout"))
-        graceSlider.noUiSlider.set($this.data("grace"))
+        periodSlider.noUiSlider.set($this.data("timeout"));
+        graceSlider.noUiSlider.set($this.data("grace"));
+        intervalSlider.noUiSlider.set($this.data("interval"));
         $('#update-timeout-modal').modal({"show":true, "backdrop":"static"});
 
         return false;

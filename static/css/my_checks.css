@@ -44,6 +44,14 @@
     margin-left: -30px;
 }
 
+#interval-slider {
+   margin: 20px 50px 140px 50px;
+}
+
+#interval-slider.noUi-connect {
+ background: #d10b0b;
+}
+
 .update-timeout-terms {
     color: #999;
 }
