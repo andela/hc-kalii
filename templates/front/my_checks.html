@@ -122,6 +122,7 @@
             {% csrf_token %}
             <input type="hidden" name="timeout" id="update-timeout-timeout" />
             <input type="hidden" name="grace" id="update-timeout-grace" />
+            <input type="hidden" name="interval" id="update-timeout-interval"/>
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="update-timeout-info text-center">
@@ -139,26 +140,52 @@
                     </div>
                     <div id="period-slider"></div>
 
+                    {% comment %} Nag Interval slider starts here {% endcomment %}
                     <div class="update-timeout-info text-center">
                         <span
                             class="update-timeout-label"
                             data-toggle="tooltip"
-                            title="When check is late, how much time to wait until alert is sent">
-                            Grace Time
+                            title="When check is grace time + period late, how much time to wait until alert is sent">
+                            Nag Time
                         </span>
                         <span
-                            id="grace-slider-value"
+                            id="interval-slider-value"
                             class="update-timeout-value">
-                            1 day
+                            10 min
                         </span>
                     </div>
 
+                    <div id="interval-slider"></div>
+                    {% comment %}Nag  Interval slider ends here {% endcomment %}
+
+                   
+                    <div class="update-timeout-info text-center">
+                        <span class="update-timeout-label" data-toggle="tooltip" title="When check is late, how much time to wait until alert is sent">
+                            Grace Time
+                        </span>
+                        <span id="grace-slider-value" class="update-timeout-value">
+                            1 day
+                        </span>
+                              </div>
+                    
                     <div id="grace-slider"></div>
+
+
+
+
+
+
+
 
                     <div class="update-timeout-terms">
                         <p>
                             <span>Period</span>
                             Expected time between pings.
+                        </p>
+                        <p>
+                            <span>Nag Interval</span>
+                             When a check is later than the timeout and grace period,
+                             how much time between periodic alerts.
                         </p>
                         <p>
                             <span>Grace Time</span>

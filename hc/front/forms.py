@@ -26,7 +26,7 @@ class TimeoutForm(forms.Form):
 
     timeout = forms.IntegerField(min_value=60, max_value=7776000)
     grace = forms.IntegerField(min_value=60, max_value=7776000)
-
+    interval = forms.IntegerField(min_value=60, max_value=2592000)
 
 class AddChannelForm(forms.ModelForm):
 
