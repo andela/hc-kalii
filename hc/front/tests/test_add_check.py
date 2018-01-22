@@ -23,9 +23,3 @@ class AddCheckTestCase(BaseTestCase):
         self.client.login(username="charlie@example.org", password="password")
         dashboard = self.client.get("/checks/")
         self.assertNotContains(dashboard, "Team check")
-
-
-
-        
-
-    
