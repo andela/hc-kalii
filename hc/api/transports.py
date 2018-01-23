@@ -4,6 +4,7 @@ from django.utils import timezone
 import json
 import requests
 from six.moves.urllib.parse import quote
+from twilio.rest import Client
 
 from hc.lib import emails
 
@@ -216,3 +217,17 @@ class VictorOps(HttpTransport):
         }
 
         return self.post(self.channel.value, payload)
+
+class SMS(HttpTransport):
+    def notify(self, check):
+
+        # Find these values at https://twilio.com/user/account
+        account_sid = "AC28abc2ca88811bd184de306ac7368fbc"
+        auth_token = "ce8f93c052f6bf0600f455c587123f37"
+
+        client = Client(account_sid, auth_token)
+        print(self.channel, '-------------------------<<<<')
+        client.api.account.messages.create(
+            to=self.channel.value,
+            from_="+19182174870",
+            body="Hello there!")
