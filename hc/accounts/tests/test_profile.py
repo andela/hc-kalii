@@ -3,11 +3,27 @@ import re
 from django.core import mail
 
 from hc.test import BaseTestCase
-from hc.accounts.models import Member
+from hc.accounts.models import Member, Profile, User
 from hc.api.models import Check
 
 
 class ProfileTestCase(BaseTestCase):
+    
+    def _invite_member(self, email):
+        """
+        This is helper method invites a new team member
+        """
+        form = {"invite_team_member": "1", "email": email}
+        response = self.client.post("/accounts/profile/", form)
+        self.assertEqual(response.status_code, 200)
+
+    def _get_member(self, email):
+        """
+        This helper method gets a specific member from a team
+        """
+        user = User.objects.get(email=email)
+        return Member.objects.filter(team=self.alice.profile, user=user).first()
+
 
     def test_it_sends_set_password_link(self):
         self.client.login(username="alice@example.org", password="password")
@@ -155,6 +171,18 @@ class ProfileTestCase(BaseTestCase):
 
         api_key = self.alice.profile.api_key  # should return a new api key
         assert api_key
+    
 
+    def test_adding_team_member_with_lowest_priority(self):
+        """
+        Ensure that a new team member is added leading the priority
+        to reduce in turn
+        """
+        self.client.login(username="alice@example.org", password="password")
+        self._invite_member("glassman@example.org")
+
+        member = self._get_member("glassman@example.org")
+        self.assertTrue(member.priority, "LOW")
+        
 
 
