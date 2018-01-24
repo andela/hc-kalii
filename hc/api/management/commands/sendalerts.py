@@ -48,15 +48,25 @@ class Command(BaseCommand):
         check.status = check.get_status()
         check.save()
         if check.status == "down":
+            self.notify_members(check)
             check.nag_after = (timezone.now() + check.interval)
             check.nag_status = True
             check.save()
 
+        self.send_alert(check)
+        connection.close()
+        return True
+
+    def send_alert(self, check):
+        """
+        This helper method  notifies a user
+        """
         tmpl = "\nSending alert, status=%s, code=%s\n"
         self.stdout.write(tmpl % (check.status, check.code))
         errors = check.send_alert()
         for ch, error in errors:
-            self.stdout.write("ERROR: %s %s %s\n" % (ch.kind, ch.value, error))
+            self.stdout.write("ERROR: %s %s %s\n" %
+                              (ch.kind, ch.value, error))
 
         connection.close()
         return True
@@ -75,3 +85,15 @@ class Command(BaseCommand):
             if ticks % 60 == 0:
                 formatted = timezone.now().isoformat()
                 self.stdout.write("-- MARK %s --" % formatted)
+
+    def notify_members(self, check):
+        """
+        This method notifies members in the team
+        """
+        members = Member.objects.filter(
+            team=check.user.profile, priority="HIGH").all()
+        for member in members:
+            channel = Channel.objects.filter(value=member.user.email).first()
+            error = channel.notify(check)
+            if error not in ("", "no-op"):
+                print("%s, %s" % (channel, error))
