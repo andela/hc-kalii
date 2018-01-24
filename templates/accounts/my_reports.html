@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}My Reports - healthchecks.io{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <h1>
+            My Reports
+        </h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+    {% if checks %}
+        {% include "emails/summary-html.html" %}
+    {% else %}
+    <div class="alert alert-info">You don't have any reports yet.</div>
+    {% endif %}
+    </div>
+</div>
+{% endblock %}
