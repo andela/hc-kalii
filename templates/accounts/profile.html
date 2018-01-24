@@ -24,18 +24,30 @@
             <div class="panel-body settings-block">
                 <form method="post">
                     {% csrf_token %}
-                    <h2>Monthly Reports</h2>
-                    <label>
-                        <input
-                            name="reports_allowed"
-                            type="checkbox"
-                            {% if profile.reports_allowed %} checked {% endif %}>
-                        Each month send me a summary of my checks
-                    </label>
+                    <h2>My Reports</h2>
+                    <div class="my-reports-input">
+                        <label>
+                            <input
+                                name="reports_allowed"
+                                type="checkbox"
+                                {% if profile.reports_allowed %} checked {% endif %}>
+                            Send me reports with a summary of my checks
+                        </label>
+                        <select name="report_period">
+                            {% for period, choice in profile.REPORT_PERIOD_CHOICES %}
+                            <option
+                                value="{{ period }}"
+                                {% if profile.report_period == period %} selected {% endif %}>{{ choice }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
                     <button
                         name="update_reports_allowed"
                         type="submit"
-                        class="btn btn-default pull-right">Save</button>
+                        class="btn btn-default pull-left">Save</button>
+                        &nbsp;
+                        <a class="btn btn-primary" href="{% url 'hc-reports' %}">View Reports</a>
                 </form>
             </div>
         </div>
@@ -56,7 +68,9 @@
             </div>
         </div>
     </div>
+</div>
 
+<div class="row">
     <div class="col-sm-6">
         <div class="panel panel-default">
             <div class="panel-body settings-block">
