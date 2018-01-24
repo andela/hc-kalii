@@ -157,7 +157,9 @@ def profile(request):
             form = ReportSettingsForm(request.POST)
             if form.is_valid():
                 profile.reports_allowed = form.cleaned_data["reports_allowed"]
+                profile.report_period = form.cleaned_data["report_period"]
                 profile.save()
+                return redirect("hc-profile")
                 messages.success(request, "Your settings have been updated!")
         elif "invite_team_member" in request.POST:
             if not profile.team_access_allowed:
@@ -218,6 +220,44 @@ def profile(request):
 
     return render(request, "accounts/profile.html", ctx)
 
+@login_required
+def my_reports(request):
+    # Display a report of user's current checks when
+    user = request.user
+    checks = user.check_set.order_by("created")
+
+    ctx = {
+        "page": "reports",
+        "checks": checks,
+    }
+
+    return render(request, "accounts/my_reports.html", ctx)
+
+@login_required
+def set_password(request):
+    profile = request.user.profile
+    if not check_password(token, profile.token):
+        return HttpResponseBadRequest()
+
+    if request.method == "POST":
+        form = SetPasswordForm(request.POST)
+        if form.is_valid():
+            password = form.cleaned_data["password"]
+            request.user.set_password(password)
+            request.user.save()
+
+            profile.token = ""
+            profile.save()
+
+            # Setting a password logs the user out, so here we
+            # log them back in.
+            u = authenticate(username=request.user.email, password=password)
+            auth_login(request, u)
+
+            messages.success(request, "Your password has been set!")
+            return redirect("hc-profile")
+
+    return render(request, "accounts/set_password.html", {})
 
 @login_required
 def set_password(request, token):
