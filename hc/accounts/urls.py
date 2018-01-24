@@ -18,6 +18,8 @@ urlpatterns = [
     url(r'^unsubscribe_reports/([\w-]+)/$',
         views.unsubscribe_reports, name="hc-unsubscribe-reports"),
 
+    url(r'^reports/$', views.my_reports, name="hc-reports"),
+
     url(r'^set_password/([\w-]+)/$',
         views.set_password, name="hc-set-password"),
 
