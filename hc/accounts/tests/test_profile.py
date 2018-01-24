@@ -29,6 +29,15 @@ class ProfileTestCase(BaseTestCase):
 
         ###Assert that the email was sent and check email content
 
+    def test_it_sends_report(self):
+        ### Test if correct report is sent to user via email
+        check = Check(name="Test Check", user=self.alice)
+        check.save()
+        self.alice.profile.send_report()
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].subject, 'Monthly Report')
+        self.assertIn('This is a monthly report sent by healthchecks.io', str(mail.outbox[0].body))
+
     def test_it_adds_team_member(self):
         self.client.login(username="alice@example.org", password="password")
 
