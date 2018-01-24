@@ -16,10 +16,10 @@ class ProfileAdmin(admin.ModelAdmin):
         }
 
     list_display = ("id", "users", "reports_allowed", "next_report_date",
-                    "ping_log_limit")
+                    "ping_log_limit", "report_period")
     search_fields = ["id", "user__email"]
     list_filter = ("reports_allowed", "team_access_allowed",
-                   "next_report_date")
+                   "next_report_date", "report_period")
 
     def users(self, obj):
         if obj.member_set.count() == 0:
