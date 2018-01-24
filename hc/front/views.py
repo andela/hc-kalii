@@ -154,7 +154,7 @@ def getting_started(request):
         "default_grace": int(DEFAULT_GRACE.total_seconds())
     }
 
-    return render(request, "front/docs_api.html", ctx)
+    return render(request, "front/docs_starting.html", ctx)
 
 def faq(request):
     ctx = {

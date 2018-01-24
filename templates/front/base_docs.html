@@ -25,6 +25,9 @@
 
             </ul>
             {% endif %}
+        <li {% if section == "api" %} class="active" {% endif %}>
+            <a href="{% url 'hc-docs-api' %}">REST API</a>
+        </li>
         <li {% if section == "faq" %} class="active" {% endif %}>
             <a href="{% url 'hc-faq' %}">FAQ</a>
             {% if section == "faq" %}
@@ -39,9 +42,6 @@
 
             </ul>
             {% endif %}
-        </li>
-        <li {% if section == "api" %} class="active" {% endif %}>
-            <a href="{% url 'hc-docs-api' %}">REST API</a>
         </li>
     </ul>
     </div>
