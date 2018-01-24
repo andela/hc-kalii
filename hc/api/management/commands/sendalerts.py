@@ -6,7 +6,8 @@ from django.core.management.base import BaseCommand
 from django.db import connection
 from django.utils import timezone
 from hc.api.models import Check
-
+from hc.accounts.models import Member
+from hc.api.models import Channel
 executor = ThreadPoolExecutor(max_workers=10)
 logger = logging.getLogger(__name__)
 
