@@ -1,0 +1,141 @@
+{% extends "front/base_docs.html" %}
+{% load staticfiles %}
+
+{% block title %}GETTING STARTED - healthchecks.io{% endblock %}
+
+{% block docs_content %}
+<div class="getting-started">
+<h2>GETTING STARTED</h2>
+<p>
+    New to Healthchecks? Or to Cron monitoring in general? Well, you came to the right place: read this material to quickly get up and running.
+    <br/> The tutorials are covered in a series of videos. See you in the videos, feel free to ask questions. The healthchecks team is available 24/7.
+
+
+</p>
+<ul>
+    <li><a href="#login">Logging in to Healthchecks</a></li>
+    <li><a href="#create-check">Create a new check</a></li>
+    <li><a href="#example">Example cron job</a></li>
+    <li><a href="#failed_checks">Failing Jobs. </a></li>
+</ul>
+
+<a name="login"></a>
+<h2 class="rule">Logging in to Healthchecks</h2>
+<p>Here at healthchecks we take you seriously. This is why we a have implemented an elegant and easy way to login and get you working immediately.
+    Logging into healthchecks is pretty easy but not a widely used convention. This is why we decided to make a video on it
+</p>
+<p>You and your team may login via an email sent to you or alternatively you may set up a password.
+</p>
+
+<a href="#" class="launch-modal" data-modal-id="modal-video1">
+            <span class="video-link-icon"><i class="fa fa-play"></i></span>
+            <span class="video-link-text">Watch</span>
+        </a>
+<div class="modal fade" id="modal-video1" tabindex="-1" role="dialog" aria-labelledby="modal-video-label">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-video">
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="video-frame" allowFullScreen frameborder="0" height="564" mozallowfullscreen src="https://player.vimeo.com/video/252588169" webkitAllowFullScreen width="640"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<a name="create-check"></a>
+<h2 class="rule">Creating a new check</h2>
+
+<p>
+Creating a new check is an easy feet but will get you scratching your head if you do not know what you are doing.
+</p>
+
+<a href="#" class="launch-modal" data-modal-id="modal-video2">
+            <span class="video-link-icon"><i class="fa fa-play"></i></span>
+            <span class="video-link-text">Watch</span>
+        </a>
+<div class="modal fade" id="modal-video2" tabindex="-1" role="dialog" aria-labelledby="modal-video-label">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-video">
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="video-frame" allowFullScreen frameborder="0" height="564" mozallowfullscreen src="https://player.vimeo.com/video/252588520" webkitAllowFullScreen width="640"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<a name="example"></a>
+<h2 class="rule">Example Cron job</h2>
+
+<p>
+This example cron job is pretty easy and is more conceptual (In reality we wouldn't create a cron job that does nothing except print on the terminal) it is rather how all cron jobs work though.
+</p>
+<a href="#" class="launch-modal" data-modal-id="modal-video3">
+            <span class="video-link-icon"><i class="fa fa-play"></i></span>
+            <span class="video-link-text">Watch</span>
+        </a>
+<div class="modal fade" id="modal-video3" tabindex="-1" role="dialog" aria-labelledby="modal-video-label">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-video">
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="video-frame" allowFullScreen frameborder="0" height="564" mozallowfullscreen src="https://player.vimeo.com/video/252589322" webkitAllowFullScreen width="640"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<a name="failed_jobs"></a>
+<h2 class="rule">Failing Jobs</h2>
+
+<p>
+    When jobs fail a notification is sent to you and your team via email and channels you have setup
+</p>
+    <a href="#" class="launch-modal" data-modal-id="modal-video4">
+            <span class="video-link-icon"><i class="fa fa-play"></i></span>
+            <span class="video-link-text">Watch</span>
+        </a>
+<div class="modal fade" id="modal-video4" tabindex="-1" role="dialog" aria-labelledby="modal-video-label">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-video">
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="video-frame" allowFullScreen frameborder="0" height="564" mozallowfullscreen src="https://player.vimeo.com/video/252588946" webkitAllowFullScreen width="640"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
