@@ -171,6 +171,7 @@ ACCESS_TOKEN_SECRETE=os.environ['ACCESS_TOKEN_SECRETE']
 # SMS integration
 ACCOUNT_SID=os.environ['ACCOUNT_SID']
 AUTH_TOKEN=os.environ['AUTH_TOKEN']
+FROM_=os.environ['FROM_']
 
 # Telegram integration
 TELEGRAM_TOKEN = os.environ['TELEGRAM_TOKEN']

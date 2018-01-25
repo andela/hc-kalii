@@ -14,7 +14,7 @@ class AddSMSTestCase(BaseTestCase):
         r = self.client.get("/integrations/add_telegram/")
         self.assertContains(r, "@hckaliiBot", status_code=200)
 
-    def test_it_adds_sms(self):
+    def test_it_adds_telegram(self):
         url = "/integrations/add/"
         form = {"kind": "telegram", "value": "-8734723234"}
         self.client.login(username="alice@example.org", password="password")

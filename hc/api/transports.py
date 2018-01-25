@@ -59,13 +59,10 @@ class Email(Transport):
         if not self.channel.email_verified:
             return "Email not verified"
 
-        print('+++++++++++++++++++++++++++++++++++++++++++++++')
-
         show_upgrade_note = False
         if settings.USE_PAYMENTS and check.status == "up":
             if not check.user.profile.team_access_allowed:
                 show_upgrade_note = True
-        print(check, self.checks(), show_upgrade_note, timezone.now(), '.....<><><><><>------===')
         ctx = {
             "check": check,
             "checks": self.checks(),
@@ -238,7 +235,7 @@ class SMS(HttpTransport):
         client = Client(settings.ACCOUNT_SID, settings.AUTH_TOKEN)
         sms = client.api.account.messages.create(
             to=self.channel.value,
-            from_="+16414355468",
+            from_=settings.FROM_,
             body=custom_message(check))
 
 
