@@ -8,6 +8,7 @@ from twilio.rest import Client
 from datetime import datetime
 from hc.lib import emails
 import twitter
+import telegram
 
 
 def tmpl(template_name, **ctx):
@@ -229,7 +230,7 @@ class SMS(HttpTransport):
         auth_token = "ce8f93c052f6bf0600f455c587123f37"
 
         client = Client(account_sid, auth_token)
-        print(self.channel, '-------------------------<<<<')
+        print(self.channel.value, '-------------------------<<<<')
         client.api.account.messages.create(
             to=self.channel.value,
             from_="+19182174870",
@@ -247,3 +248,11 @@ class Twitter(HttpTransport):
                           access_token_key=access_token_key,
                           access_token_secret=access_token_secret)
         api.PostUpdate('hello the time is '+str(datetime.now()))
+
+
+class Telegram(HttpTransport):
+    def notify(self, check):
+        print('====================<<<<<<<<<====>>>>>>>', self.channel.value)
+        token = '525874670:AAHKh9UpCoRwTWis5O0z7B8-mpzcY7tJ7Eg'
+        bot = telegram.Bot(token=token)
+        send = bot.send_message(chat_id=self.channel.value, text="Helo=====")
