@@ -161,8 +161,14 @@ EMAIL_USE_TLS = os.environ['EMAIL_USE_TLS']
 # Slack integration -- override these in local_settings
 SLACK_CLIENT_ID = os.environ['SLACK_CLIENT_ID']
 SLACK_CLIENT_SECRET = os.environ['SLACK_CLIENT_SECRET']
-print('client----->',SLACK_CLIENT_ID)
-print('secret----->', SLACK_CLIENT_SECRET)
+
+# Twitter integration
+CONSUMER_KEY=os.environ['CONSUMER_KEY']
+CONSUMER_SECRET=os.environ['CONSUMER_SECRET']
+ACCESS_TOKEN_KEY=os.environ['ACCESS_TOKEN_KEY']
+ACCESS_TOKEN_SECRETE=os.environ['ACCESS_TOKEN_SECRETE']
+
+
 
 # Pushover integration -- override these in local_settings
 PUSHOVER_API_TOKEN = None

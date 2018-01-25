@@ -247,14 +247,10 @@ class SMS(HttpTransport):
 
 class Twitter(HttpTransport):
     def notify(self, check):
-        consumer_key = '284F1aiycqoVJf2acaS1s72i3'
-        consumer_secret = 'ynFoSaxTFvExcE0s0KQexAvke8FVkMautNwfDRUbltULFtZYXf'
-        access_token_key = '955849368753590273-o0XE72P9LDBxjXEEkkEeuE5X0bAD5Rn'
-        access_token_secret = 'VN7xPWQrZZU5YJX8o0NOHKIuyiPoR6KCgAS4d3tvyREOK'
-        api = twitter.Api(consumer_key=consumer_key,
-                          consumer_secret=consumer_secret,
-                          access_token_key=access_token_key,
-                          access_token_secret=access_token_secret)
+        api = twitter.Api(consumer_key=settings.CONSUMER_KEY,
+                          consumer_secret=settings.CONSUMER_SECRET,
+                          access_token_key=settings.ACCESS_TOKEN_KEY,
+                          access_token_secret=settings.ACCESS_TOKEN_SECRETE)
         api.PostUpdate(custom_message(check)+'\nSent-' + datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
 
