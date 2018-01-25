@@ -6,8 +6,13 @@
     <div class="col-sm-2">
 
     <ul class="docs-nav">
+        <li {% if section == "getting_started" %} class="active" {% endif %}>
+            <a href="{% url 'hc-getting-started' %}">Getting started</a>
+        </li>
         <li {% if section == "home" %} class="active" {% endif %}>
             <a href="{% url 'hc-docs' %}">Executing a Ping</a>
+            {% if section == "home" %}
+
             <ul>
                 <li><a href="{% url 'hc-docs' %}#crontab">Crontab</a></li>
                 <li><a href="{% url 'hc-docs' %}#bash">Bash</a></li>
@@ -17,13 +22,28 @@
                 <li><a href="{% url 'hc-docs' %}#browser">Browser</a></li>
                 <li><a href="{% url 'hc-docs' %}#powershell">PowerShell</a></li>
                 <li><a href="{% url 'hc-docs' %}#email">Email</a></li>
+
             </ul>
-        </li>
+            {% endif %}
         <li {% if section == "api" %} class="active" {% endif %}>
             <a href="{% url 'hc-docs-api' %}">REST API</a>
         </li>
-    </ul>
+        <li {% if section == "faq" %} class="active" {% endif %}>
+            <a href="{% url 'hc-faq' %}">FAQ</a>
+            {% if section == "faq" %}
+            <ul>
+                <li><a href="{% url 'hc-faq' %}#What is Healthchecks?">What is Healthchecks?</a></li>
+                <li><a href="{% url 'hc-faq' %}#Why would I need this?">Why do I need this ?</a></li>
+                <li><a href="{% url 'hc-faq' %}#How is this different?">How is this different?</a></li>
+                <li><a href="{% url 'hc-faq' %}#Which programming language?">Which language?</a></li>
+                <li><a href="{% url 'hc-faq' %}#What is a check?">What is a check?</a></li>
 
+                <li><a href="{% url 'hc-faq' %}#Who are you?">Who are you?</a></li>
+
+            </ul>
+            {% endif %}
+        </li>
+    </ul>
     </div>
     <div class="col-sm-10">
         {% block docs_content %}
