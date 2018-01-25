@@ -17,7 +17,8 @@ STATUSES = (
     ("up", "Up"),
     ("down", "Down"),
     ("new", "New"),
-    ("paused", "Paused")
+    ("paused", "Paused"),
+    ("often", "Often"),
 )
 DEFAULT_TIMEOUT = td(days=1)
 DEFAULT_GRACE = td(hours=1)
@@ -57,6 +58,7 @@ class Check(models.Model):
     interval = models.DurationField(default=DEFAULT_NAG)
     nag_after = models.DateTimeField(null=True, blank=True, editable=True)
     nag_status = models.BooleanField(default=True)
+    often = models.BooleanField(default=False)
 
     def name_then_code(self):
         if self.name:
@@ -73,8 +75,13 @@ class Check(models.Model):
     def email(self):
         return "%s@%s" % (self.code, settings.PING_EMAIL_DOMAIN)
 
+    def send_often_status(self):
+        self.status = "often"
+        self.send_alert()
+        self.status = "up"
+
     def send_alert(self):
-        if self.status not in ("up", "down"):
+        if self.status not in ("up", "down", "often"):
             raise NotImplementedError("Unexpected status: %s" % self.status)
 
         errors = []
@@ -96,6 +103,9 @@ class Check(models.Model):
 
         if self.last_ping + self.timeout + self.grace==now:
             return "nag"
+
+        if self.often and (now - self.last_ping) < (self.timeout + self.grace):
+            return "often"
 
         return "down"
 
