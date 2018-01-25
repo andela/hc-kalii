@@ -7,9 +7,9 @@
 {% block content %}
 <div class="row">
 <div class="col-sm-12">
-    <h1>Email</h1>
+    <h1>SMS</h1>
 
-    <p>Get an sms when check goes up or down.</p>
+    <p>Get an sms when a check goes up or down.</p>
 
     <p>
         <strong>Tip:</strong>
@@ -17,9 +17,8 @@
     </p>
 
     <p>
-        <strong>Confirmation needed.</strong>
-        After entering an email address, healthchecks.io will send out a confirmation link.
-        Only confirmed addresses will receive notifications.
+        <strong>Instructions.</strong>
+        Create an account on <a href="https://www.twilio.com/">twilio</a> and have your phone number verified, and add the phone number below 
     </p>
 
     <h2>Integration Settings</h2>
@@ -28,14 +27,14 @@
         {% csrf_token %}
         <input type="hidden" name="kind" value="sms" />
         <div class="form-group">
-            <label for="sms" class="col-sm-2 control-label">Phone number</label>
+            <label for="id_sms" class="col-sm-2 control-label">Phone number</label>
             <div class="col-sm-3">
                 <input
-                    id="id_phone_numner"
+                    id="id_sms"
                     type="text"
                     class="form-control"
                     name="value"
-                    placeholder="070987543345">
+                    placeholder="+254700000000">
             </div>
         </div>
         <div class="form-group">

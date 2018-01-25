@@ -16,6 +16,16 @@ def tmpl(template_name, **ctx):
     return render_to_string(template_path, ctx).strip()
 
 
+def custom_message(check):
+    message = 'The Check ' + check.name + ' - ' + str(check.code)
+    if check.status == 'down':
+        message = message + ' is DOWN \nLast ping was ' \
+            + str(check.last_ping.strftime("%Y-%m-%d %H:%M:%S"))
+    else:
+        message = message + ' recieved a ping and is UP now'
+    return message
+
+
 class Transport(object):
     def __init__(self, channel):
         self.channel = channel
@@ -224,17 +234,15 @@ class VictorOps(HttpTransport):
 
 class SMS(HttpTransport):
     def notify(self, check):
-
         # Find these values at https://twilio.com/user/account
-        account_sid = "AC28abc2ca88811bd184de306ac7368fbc"
-        auth_token = "ce8f93c052f6bf0600f455c587123f37"
-
+        account_sid = "ACb25e833c7258f5ca130955d796d55009"
+        auth_token = "364f7573934a1c4b3415fee7a4228171"
         client = Client(account_sid, auth_token)
-        print(self.channel.value, '-------------------------<<<<')
-        client.api.account.messages.create(
+        sms = client.api.account.messages.create(
             to=self.channel.value,
-            from_="+19182174870",
-            body="Hello there!")
+            from_="+16414355468",
+            body=custom_message(check))
+        print(sms.sid, '===============<<<<<<<<==========')
 
 
 class Twitter(HttpTransport):
@@ -247,12 +255,12 @@ class Twitter(HttpTransport):
                           consumer_secret=consumer_secret,
                           access_token_key=access_token_key,
                           access_token_secret=access_token_secret)
-        api.PostUpdate('hello the time is '+str(datetime.now()))
+        api.PostUpdate(custom_message(check)+'\nSent-' + datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 class Telegram(HttpTransport):
     def notify(self, check):
-        print('====================<<<<<<<<<====>>>>>>>', self.channel.value)
         token = '525874670:AAHKh9UpCoRwTWis5O0z7B8-mpzcY7tJ7Eg'
         bot = telegram.Bot(token=token)
-        send = bot.send_message(chat_id=self.channel.value, text="Helo=====")
+        send = bot.send_message(chat_id=self.channel.value, text=custom_message(check))

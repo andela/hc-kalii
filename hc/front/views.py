@@ -324,7 +324,6 @@ def channels(request):
 
 
 def do_add_channel(request, data):
-    print('======================>>>>>>>', data)
     form = AddChannelForm(data)
     if form.is_valid():
         channel = form.save(commit=False)
@@ -407,14 +406,12 @@ def add_sms(request):
 @login_required
 def add_twitter(request):
     ctx = {"page": "channels"}
-    print('=======================>>>>>>', ctx)
     return render(request, "integrations/add_twitter.html", ctx)
 
 
 @login_required
 def add_telegram(request):
     ctx = {"page": "channels"}
-    print('=======================>>>>>>', ctx)
     return render(request, "integrations/add_telegram.html", ctx)
 
 
