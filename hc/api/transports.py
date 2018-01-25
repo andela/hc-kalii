@@ -5,8 +5,9 @@ import json
 import requests
 from six.moves.urllib.parse import quote
 from twilio.rest import Client
-
+from datetime import datetime
 from hc.lib import emails
+import twitter
 
 
 def tmpl(template_name, **ctx):
@@ -47,11 +48,13 @@ class Email(Transport):
         if not self.channel.email_verified:
             return "Email not verified"
 
+        print('+++++++++++++++++++++++++++++++++++++++++++++++')
+
         show_upgrade_note = False
         if settings.USE_PAYMENTS and check.status == "up":
             if not check.user.profile.team_access_allowed:
                 show_upgrade_note = True
-
+        print(check, self.checks(), show_upgrade_note, timezone.now(), '.....<><><><><>------===')
         ctx = {
             "check": check,
             "checks": self.checks(),
@@ -231,3 +234,16 @@ class SMS(HttpTransport):
             to=self.channel.value,
             from_="+19182174870",
             body="Hello there!")
+
+
+class Twitter(HttpTransport):
+    def notify(self, check):
+        consumer_key = '284F1aiycqoVJf2acaS1s72i3'
+        consumer_secret = 'ynFoSaxTFvExcE0s0KQexAvke8FVkMautNwfDRUbltULFtZYXf'
+        access_token_key = '955849368753590273-o0XE72P9LDBxjXEEkkEeuE5X0bAD5Rn'
+        access_token_secret = 'VN7xPWQrZZU5YJX8o0NOHKIuyiPoR6KCgAS4d3tvyREOK'
+        api = twitter.Api(consumer_key=consumer_key,
+                          consumer_secret=consumer_secret,
+                          access_token_key=access_token_key,
+                          access_token_secret=access_token_secret)
+        api.PostUpdate('hello the time is '+str(datetime.now()))
