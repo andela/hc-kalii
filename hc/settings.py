@@ -172,6 +172,9 @@ ACCESS_TOKEN_SECRETE=os.environ['ACCESS_TOKEN_SECRETE']
 ACCOUNT_SID=os.environ['ACCOUNT_SID']
 AUTH_TOKEN=os.environ['AUTH_TOKEN']
 
+# Telegram integration
+TELEGRAM_TOKEN = os.environ['TELEGRAM_TOKEN']
+
 # Pushover integration -- override these in local_settings
 PUSHOVER_API_TOKEN = None
 PUSHOVER_SUBSCRIPTION_URL = None

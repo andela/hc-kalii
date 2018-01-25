@@ -254,6 +254,5 @@ class Twitter(HttpTransport):
 
 class Telegram(HttpTransport):
     def notify(self, check):
-        token = '525874670:AAHKh9UpCoRwTWis5O0z7B8-mpzcY7tJ7Eg'
-        bot = telegram.Bot(token=token)
+        bot = telegram.Bot(token=settings.TELEGRAM_TOKEN)
         send = bot.send_message(chat_id=self.channel.value, text=custom_message(check))
