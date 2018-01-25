@@ -11,31 +11,31 @@
 	opacity: 0.7;
 }
 
-.modal-content {
+.m-content {
 	background: none;
 	border: 0;
 	-moz-border-radius: 0; -webkit-border-radius: 0; border-radius: 0;
 	-moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none;
 }
 
-.modal-body {
+.m-body {
 	padding: 0 25px 25px 25px;
 }
 
-.modal-header {
+.m-header {
 	padding: 25px 25px 15px 25px;
 	text-align: right;
 }
 
-.modal-header, .modal-footer {
+.m-header, .modal-footer {
 	border: 0;
 }
 
-.modal-header{
+.m-header{
     width: 600px;
     margin: 0px 0px 0px 40px;
     }
-.modal-header .close {
+.m-header .close {
 	float: none;
 	margin: 0;
 	font-size: 36px;
