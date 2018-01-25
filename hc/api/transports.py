@@ -235,14 +235,11 @@ class VictorOps(HttpTransport):
 class SMS(HttpTransport):
     def notify(self, check):
         # Find these values at https://twilio.com/user/account
-        account_sid = "ACb25e833c7258f5ca130955d796d55009"
-        auth_token = "364f7573934a1c4b3415fee7a4228171"
-        client = Client(account_sid, auth_token)
+        client = Client(settings.ACCOUNT_SID, settings.AUTH_TOKEN)
         sms = client.api.account.messages.create(
             to=self.channel.value,
             from_="+16414355468",
             body=custom_message(check))
-        print(sms.sid, '===============<<<<<<<<==========')
 
 
 class Twitter(HttpTransport):

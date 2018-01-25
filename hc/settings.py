@@ -168,7 +168,9 @@ CONSUMER_SECRET=os.environ['CONSUMER_SECRET']
 ACCESS_TOKEN_KEY=os.environ['ACCESS_TOKEN_KEY']
 ACCESS_TOKEN_SECRETE=os.environ['ACCESS_TOKEN_SECRETE']
 
-
+# SMS integration
+ACCOUNT_SID=os.environ['ACCOUNT_SID']
+AUTH_TOKEN=os.environ['AUTH_TOKEN']
 
 # Pushover integration -- override these in local_settings
 PUSHOVER_API_TOKEN = None
