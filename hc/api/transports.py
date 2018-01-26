@@ -19,10 +19,10 @@ def tmpl(template_name, **ctx):
 def custom_message(check):
     message = 'The Check ' + check.name + ' - ' + str(check.code)
     if check.status == 'down':
-        message = message + ' is DOWN \nLast ping was ' \
+        message = message + ' is DOWN \nLast ping ' \
             + str(check.last_ping.strftime("%Y-%m-%d %H:%M:%S"))
     else:
-        message = message + ' recieved a ping and is UP now'
+        message = message + ' recieved a ping, UP now'
     return message
 
 
@@ -237,6 +237,7 @@ class SMS(HttpTransport):
             to=self.channel.value,
             from_=settings.FROM_,
             body=custom_message(check))
+        return {'sid':sms.sid, 'account_id':sms.account_sid}
 
 
 class Twitter(HttpTransport):
@@ -245,11 +246,15 @@ class Twitter(HttpTransport):
                           consumer_secret=settings.CONSUMER_SECRET,
                           access_token_key=settings.ACCESS_TOKEN_KEY,
                           access_token_secret=settings.ACCESS_TOKEN_SECRETE)
-        api.PostUpdate(custom_message(check)+'\nSent-' + datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-
+        tweet = api.PostUpdate(
+            self.channel.value + ' ' + custom_message(check) +
+            '\nSent-' + datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        return tweet.text
 
 
 class Telegram(HttpTransport):
     def notify(self, check):
         bot = telegram.Bot(token=settings.TELEGRAM_TOKEN)
-        send = bot.send_message(chat_id=self.channel.value, text=custom_message(check))
+        send = bot.send_message(
+            chat_id=self.channel.value, text=custom_message(check))
+        return send.text

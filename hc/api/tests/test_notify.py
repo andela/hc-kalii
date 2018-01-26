@@ -5,6 +5,7 @@ from django.test import override_settings
 from hc.api.models import Channel, Check, Notification
 from hc.test import BaseTestCase
 from mock import patch
+from datetime import datetime, timedelta
 from requests.exceptions import ConnectionError, Timeout
 
 
@@ -222,6 +223,25 @@ class NotifyTestCase(BaseTestCase):
         json = kwargs["json"]
         self.assertEqual(json["message_type"], "CRITICAL")
 
+
+    @patch("hc.api.transports.requests.request")
+    def test_telegram(self, mock_post):
+        self._setup_data("telegram", "-261469173")
+        mock_post.return_value.status_code = 200
+        date = datetime.now() - timedelta(days=1)
+        self.check.last_ping = datetime.strptime(str(date), "%Y-%m-%d %H:%M:%S.%f")
+        self.channel.notify(self.check)
+        assert Notification.objects.count() == 1
+
+    @patch("hc.api.transports.requests.request")
+    def test_twitter(self, mock_post):
+        self._setup_data("twitter", "@kayfilo")
+        mock_post.return_value.status_code = 200
+        date = datetime.now() - timedelta(days=1)
+        self.check.last_ping = datetime.strptime(str(date), "%Y-%m-%d %H:%M:%S.%f")
+        self.channel.notify(self.check)
+        assert Notification.objects.count() == 1
+
     ### Test that the web hooks handle connection errors and error 500s
     @patch("hc.api.transports.requests.request")
     def test_webhook_handles_500(self, mock_get):
@@ -231,4 +251,4 @@ class NotifyTestCase(BaseTestCase):
         self.channel.notify(self.check)
         n = Notification.objects.get()
         self.assertEqual(n.error, "Received status code 500")
-    
+
