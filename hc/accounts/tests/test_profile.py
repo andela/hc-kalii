@@ -21,22 +21,52 @@ class ProfileTestCase(BaseTestCase):
 
         ### Assert that the email was sent and check email content
 
-    def test_it_sends_report(self):
-        check = Check(name="Test Check", user=self.alice)
-        check.save()
-
-        self.alice.profile.send_report()
-
-        ###Assert that the email was sent and check email content
-
-    def test_it_sends_report(self):
-        ### Test if correct report is sent to user via email
+    def test_it_sends_default_reports(self):
+        ### Test if default reports are sent to user via email
         check = Check(name="Test Check", user=self.alice)
         check.save()
         self.alice.profile.send_report()
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, 'Monthly Report')
         self.assertIn('This is a monthly report sent by healthchecks.io', str(mail.outbox[0].body))
+
+    def test_it_sends_daily_reports(self):
+        ### Test that daily reports are sent to user via email
+        check = Check(name="Test Check", user=self.alice)
+        check.save()
+        self.alice.profile.report_period = 1
+        self.alice.profile.send_report()
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].subject, 'Daily Report')
+        self.assertIn('This is a daily report sent by healthchecks.io', str(mail.outbox[0].body))
+
+    def test_it_sends_weekly_reports(self):
+        ### Test that weekly reports are sent to user via email
+        check = Check(name="Test Check", user=self.alice)
+        check.save()
+        self.alice.profile.report_period = 7
+        self.alice.profile.send_report()
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].subject, 'Weekly Report')
+        self.assertIn('This is a weekly report sent by healthchecks.io', str(mail.outbox[0].body))
+
+    def test_it_sends_monthly_reports(self):
+        ### Test if monthly reports are sent to user via email
+        check = Check(name="Test Check", user=self.alice)
+        check.save()
+        self.alice.profile.report_period = 30
+        self.alice.profile.send_report()
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].subject, 'Monthly Report')
+        self.assertIn('This is a monthly report sent by healthchecks.io', str(mail.outbox[0].body))
+
+    def test_user_reports_on_dashboard(self):
+        ### Test if user can see reports on dashboard
+        check = Check(name="Cron 101", user=self.alice)
+        check.save()
+        self.client.login(username="alice@example.org", password="password")
+        r = self.client.get("/accounts/reports/")
+        assert r.status_code == 200
 
     def test_it_adds_team_member(self):
         self.client.login(username="alice@example.org", password="password")
