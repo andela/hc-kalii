@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
 .docs-nav {
     margin: 20px 0 0 0;
     padding: 0;
@@ -50,4 +51,9 @@ a.section {
 
 a.section:hover  {
     text-decoration: none;
+}
+
+.faq p {
+    line-height: 2em;
+    font-family: 'Montserrat', sans-serif;
 }
