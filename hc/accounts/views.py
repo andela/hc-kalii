@@ -13,7 +13,7 @@ from django.http import HttpResponseForbidden, HttpResponseBadRequest
 from django.shortcuts import redirect, render
 from hc.accounts.forms import (EmailPasswordForm, InviteTeamMemberForm,
                                RemoveTeamMemberForm, ReportSettingsForm,
-                               SetPasswordForm, TeamNameForm)
+                               SetPasswordForm, TeamNameForm, UpdatePriorityForm)
 from hc.accounts.models import Profile, Member
 from hc.api.models import Channel, Check
 from hc.lib.badges import get_badge_url
@@ -196,6 +196,21 @@ def profile(request):
                 profile.team_name = form.cleaned_data["team_name"]
                 profile.save()
                 messages.success(request, "Team Name updated!")
+        elif "update_priority" in request.POST:
+            if not profile.team_access_allowed:
+                return HttpResponseForbidden()
+            form = UpdatePriorityForm(request.POST)
+            if form.is_valid():
+                email = form.cleaned_data["email"]
+                user = User.objects.get(email=email)
+                member = Member.objects.filter(team=profile, user=user).first()
+            if member.priority == "LOW":
+               member.priority = "HIGH"
+
+            else:
+               member.priority = "LOW"
+            member.save()
+            messages.success(request, "%s's priority updated!" % email)
 
     tags = set()
     for check in Check.objects.filter(user=request.team.user):
