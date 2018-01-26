@@ -41,6 +41,10 @@ body {
     font-size: small;
 }
 
+#nav-main-sections > li > a span.unresolved{
+    color:red;
+}
+
 @media (min-width: 768px) {
     .navbar-default .navbar-nav > li.active > a, .navbar-default .navbar-nav > li > a:hover {
         border-bottom: 5px solid #eee;

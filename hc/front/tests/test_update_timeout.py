@@ -11,19 +11,21 @@ class UpdateTimeoutTestCase(BaseTestCase):
 
     def test_it_works(self):
         url = "/checks/%s/timeout/" % self.check.code
-        payload = {"timeout": 3600, "grace": 60}
+        payload = {"timeout": 3600, "grace": 60, "interval": 60}
 
         self.client.login(username="alice@example.org", password="password")
         r = self.client.post(url, data=payload)
         self.assertRedirects(r, "/checks/")
 
         check = Check.objects.get(code=self.check.code)
+        assert check.interval.total_seconds() == 60
+
         assert check.timeout.total_seconds() == 3600
         assert check.grace.total_seconds() == 60
 
     def test_team_access_works(self):
         url = "/checks/%s/timeout/" % self.check.code
-        payload = {"timeout": 7200, "grace": 60}
+        payload = {"timeout": 7200, "grace": 60, "interval":60 }
 
         # Logging in as bob, not alice. Bob has team access so this
         # should work.
@@ -57,3 +59,18 @@ class UpdateTimeoutTestCase(BaseTestCase):
         self.client.login(username="charlie@example.org", password="password")
         r = self.client.post(url, data=payload)
         assert r.status_code == 403
+
+    def test_longer_timeouts_grace_and_interval_periods(self):
+        """
+        Test that user can be able to set timeouts and grace periods of longer than 30 days
+        """
+        url = "/checks/%s/timeout/" % self.check.code
+        payload = {"timeout": 5184000, "grace": 5184000, "interval": 2592000}
+
+        self.client.login(username="alice@example.org", password="password")
+        r = self.client.post(url, data=payload)
+
+        check = Check.objects.get(code=self.check.code)
+        assert check.timeout.total_seconds() == 5184000
+        assert check.grace.total_seconds() == 5184000
+        assert check.interval.total_seconds() == 2592000

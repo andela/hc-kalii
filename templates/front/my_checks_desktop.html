@@ -6,7 +6,9 @@
         <th>Ping URL</th>
         <th class="th-period">
             Period <br />
-            <span class="checks-subline">Grace</span>
+            <span class="checks-subline">Nag Period</span><br />
+            <span>Grace</span>
+            
         </th>
         <th>Last Ping</th>
         <th></th>
@@ -25,7 +27,9 @@
             {% elif check.get_status == "up" %}
                 <span class="status icon-up"></span>
             {% elif check.get_status == "down" %}
-                <span class="status icon-down"></span>
+                <span class="status icon-down blink"></span>
+                <span class="status icon-down blink"></span>
+                
             {% endif %}
         </td>
         <td class="name-cell">
@@ -54,12 +58,16 @@
                 data-url="{% url 'hc-update-timeout' check.code %}"
                 data-timeout="{{ check.timeout.total_seconds }}"
                 data-grace="{{ check.grace.total_seconds }}"
+                data-interval="{{ check.interval.total_seconds }}"
                 class="timeout-grace">
                 {{ check.timeout|hc_duration }}
                 <br />
                 <span class="checks-subline">
+                {{ check.interval|hc_duration }}
+                </span><br/>
                 {{ check.grace|hc_duration }}
                 </span>
+                
             </span>
         </td>
         <td>

@@ -1,11 +1,16 @@
 __pycache__/
 *.pyc
+.env
 .coverage
 hc.sqlite
 hc/local_settings.py
 static-collected
 hc-venv/
+*.venv
 .DS_Store
+static/.DS_Store
 htmlconv/
 .idea/
 .ropeproject/
+.vscode/
+.env
