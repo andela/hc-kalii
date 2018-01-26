@@ -6,8 +6,9 @@
         <th>Ping URL</th>
         <th class="th-period">
             Period <br />
-            <span class="checks-subline">Grace</span>
-            <br/> Nag Duration
+            <span class="checks-subline">Nag Period</span><br />
+            <span>Grace</span>
+            
         </th>
         <th>Last Ping</th>
         <th></th>
@@ -43,9 +44,10 @@
                 {{ check.timeout|hc_duration }}
                 <br />
                 <span class="checks-subline">
+                {{ check.interval|hc_duration }}
+                </span><br/>
                 {{ check.grace|hc_duration }}
                 </span>
-            <br/> {{ check.interval|hc_duration }}
             </span>
         </td>
         <td>
