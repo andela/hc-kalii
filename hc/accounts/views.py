@@ -157,8 +157,11 @@ def profile(request):
             form = ReportSettingsForm(request.POST)
             if form.is_valid():
                 profile.reports_allowed = form.cleaned_data["reports_allowed"]
+                profile.report_period = form.cleaned_data["report_period"]
                 profile.save()
+
                 messages.success(request, "Your settings have been updated!")
+                return redirect("hc-profile")
         elif "invite_team_member" in request.POST:
             if not profile.team_access_allowed:
                 return HttpResponseForbidden()
@@ -233,6 +236,18 @@ def profile(request):
 
     return render(request, "accounts/profile.html", ctx)
 
+@login_required
+def my_reports(request):
+    # Display a report of user's current checks on dashboard
+    user = request.user
+    checks = user.check_set.order_by("created")
+
+    ctx = {
+        "page": "reports",
+        "checks": checks,
+    }
+
+    return render(request, "accounts/my_reports.html", ctx)
 
 @login_required
 def set_password(request, token):
