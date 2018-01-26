@@ -32,9 +32,13 @@ class ProfileTestCase(BaseTestCase):
 
     def test_it_sends_daily_reports(self):
         ### Test that daily reports are sent to user via email
-        check = Check(name="Test Check", user=self.alice)
+        self.client.login(username="alice@example.org", password="password")
+        form = {"update_reports_allowed": 1, "reports_allowed": True, "report_period": 1}
+        res = self.client.post("/accounts/profile/", form)
+        self.assertEqual(res.status_code, 302)
+        self.alice.profile.refresh_from_db()
+        check = Check(name="Cron A", user=self.alice)
         check.save()
-        self.alice.profile.report_period = 1
         self.alice.profile.send_report()
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, 'Daily Report')
@@ -42,9 +46,13 @@ class ProfileTestCase(BaseTestCase):
 
     def test_it_sends_weekly_reports(self):
         ### Test that weekly reports are sent to user via email
-        check = Check(name="Test Check", user=self.alice)
+        self.client.login(username="alice@example.org", password="password")
+        form = {"update_reports_allowed": 1, "reports_allowed": True, "report_period": 7}
+        res = self.client.post("/accounts/profile/", form)
+        self.assertEqual(res.status_code, 302)
+        self.alice.profile.refresh_from_db()
+        check = Check(name="Cron A", user=self.alice)
         check.save()
-        self.alice.profile.report_period = 7
         self.alice.profile.send_report()
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, 'Weekly Report')
@@ -52,9 +60,13 @@ class ProfileTestCase(BaseTestCase):
 
     def test_it_sends_monthly_reports(self):
         ### Test if monthly reports are sent to user via email
-        check = Check(name="Test Check", user=self.alice)
+        self.client.login(username="alice@example.org", password="password")
+        form = {"update_reports_allowed": 1, "reports_allowed": True, "report_period": 30}
+        res = self.client.post("/accounts/profile/", form)
+        self.assertEqual(res.status_code, 302)
+        self.alice.profile.refresh_from_db()
+        check = Check(name="Cron A", user=self.alice)
         check.save()
-        self.alice.profile.report_period = 30
         self.alice.profile.send_report()
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, 'Monthly Report')
@@ -62,11 +74,11 @@ class ProfileTestCase(BaseTestCase):
 
     def test_user_reports_on_dashboard(self):
         ### Test if user can see reports on dashboard
-        check = Check(name="Cron 101", user=self.alice)
+        check = Check(name="Cron A", user=self.alice)
         check.save()
         self.client.login(username="alice@example.org", password="password")
-        r = self.client.get("/accounts/reports/")
-        assert r.status_code == 200
+        res = self.client.get("/accounts/reports/")
+        self.assertEqual(res.status_code, 200)
 
     def test_it_adds_team_member(self):
         self.client.login(username="alice@example.org", password="password")
