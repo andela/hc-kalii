@@ -202,10 +202,10 @@ class Channel(models.Model):
         else:
             raise NotImplementedError("Unknown channel kind: %s" % self.kind)
 
-    def notify(self, check):
+    def notify(self, check, api=None):
         # Make 3 attempts--
         for x in range(0, 3):
-            error = self.transport.notify(check) or ""
+            error = self.transport.notify(check, api) or ""
             if error in ("", "no-op"):
                 break  # Success!
 

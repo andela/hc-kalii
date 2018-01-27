@@ -30,7 +30,7 @@ class Transport(object):
     def __init__(self, channel):
         self.channel = channel
 
-    def notify(self, check):
+    def notify(self, check, api=None):
         """ Send notification about current status of the check.
 
         This method returns None on success, and error message
@@ -55,7 +55,7 @@ class Transport(object):
 
 
 class Email(Transport):
-    def notify(self, check):
+    def notify(self, check, api=None):
         if not self.channel.email_verified:
             return "Email not verified"
 
@@ -103,7 +103,7 @@ class HttpTransport(Transport):
 
 
 class Webhook(HttpTransport):
-    def notify(self, check):
+    def notify(self, check, api=None):
         url = self.channel.value_down
         if check.status == "up":
             url = self.channel.value_up
@@ -137,14 +137,14 @@ class Webhook(HttpTransport):
 
 
 class Slack(HttpTransport):
-    def notify(self, check):
+    def notify(self, check, api=None):
         text = tmpl("slack_message.json", check=check)
         payload = json.loads(text)
         return self.post(self.channel.slack_webhook_url, payload)
 
 
 class HipChat(HttpTransport):
-    def notify(self, check):
+    def notify(self, check, api=None):
         text = tmpl("hipchat_message.html", check=check)
         payload = {
             "message": text,
@@ -156,7 +156,7 @@ class HipChat(HttpTransport):
 class PagerDuty(HttpTransport):
     URL = "https://events.pagerduty.com/generic/2010-04-15/create_event.json"
 
-    def notify(self, check):
+    def notify(self, check, api=None):
         description = tmpl("pd_description.html", check=check)
         payload = {
             "service_key": self.channel.value,
@@ -171,7 +171,7 @@ class PagerDuty(HttpTransport):
 
 
 class Pushbullet(HttpTransport):
-    def notify(self, check):
+    def notify(self, check, api=None):
         text = tmpl("pushbullet_message.html", check=check)
         url = "https://api.pushbullet.com/v2/pushes"
         headers = {
@@ -190,7 +190,7 @@ class Pushbullet(HttpTransport):
 class Pushover(HttpTransport):
     URL = "https://api.pushover.net/1/messages.json"
 
-    def notify(self, check):
+    def notify(self, check, api=None):
         others = self.checks().filter(status="down").exclude(code=check.code)
         ctx = {
             "check": check,
@@ -217,7 +217,7 @@ class Pushover(HttpTransport):
 
 
 class VictorOps(HttpTransport):
-    def notify(self, check):
+    def notify(self, check, api=None):
         description = tmpl("victorops_description.html", check=check)
         payload = {
             "entity_id": str(check.code),
@@ -230,31 +230,28 @@ class VictorOps(HttpTransport):
         return self.post(self.channel.value, payload)
 
 class SMS(HttpTransport):
-    def notify(self, check):
-        # Find these values at https://twilio.com/user/account
-        client = Client(settings.ACCOUNT_SID, settings.AUTH_TOKEN)
-        sms = client.api.account.messages.create(
+    # Find these values at https://twilio.com/user/account
+    api = Client(settings.ACCOUNT_SID, settings.AUTH_TOKEN)
+    def notify(self, check, api=api):
+        sms = api.api.account.messages.create(
             to=self.channel.value,
             from_=settings.FROM_,
             body=custom_message(check))
-        return {'sid':sms.sid, 'account_id':sms.account_sid}
 
 
 class Twitter(HttpTransport):
-    def notify(self, check):
-        api = twitter.Api(consumer_key=settings.CONSUMER_KEY,
-                          consumer_secret=settings.CONSUMER_SECRET,
-                          access_token_key=settings.ACCESS_TOKEN_KEY,
-                          access_token_secret=settings.ACCESS_TOKEN_SECRETE)
+    api = twitter.Api(consumer_key=settings.CONSUMER_KEY,
+                        consumer_secret=settings.CONSUMER_SECRET,
+                        access_token_key=settings.ACCESS_TOKEN_KEY,
+                        access_token_secret=settings.ACCESS_TOKEN_SECRETE)
+    def notify(self, check, api=api):
         tweet = api.PostUpdate(
             self.channel.value + ' ' + custom_message(check) +
             '\nSent-' + datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-        return tweet.text
 
 
 class Telegram(HttpTransport):
-    def notify(self, check):
-        bot = telegram.Bot(token=settings.TELEGRAM_TOKEN)
-        send = bot.send_message(
+    api = telegram.Bot(token=settings.TELEGRAM_TOKEN)
+    def notify(self, check, api=api):
+        send = api.send_message(
             chat_id=self.channel.value, text=custom_message(check))
-        return send.text
