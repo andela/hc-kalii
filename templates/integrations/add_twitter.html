@@ -9,16 +9,16 @@
 <div class="col-sm-12">
     <h1>Twitter</h1>
 
-    <p>Get twitted when check goes up or down.</p>
+    <p>Get tweeted when check goes up or down.</p>
 
     <p>
         <strong>Tip:</strong>
-        Add multiple twitter ids, to notify multiple team members.
+        Add multiple twitter twitter handles to notify multiple team members.
     </p>
 
     <p>
         <strong>Instructions.</strong>
-        Find your twitter id on <a href="http://gettwitterid.com/">gettwitterid</a> and enter it into the form below.
+        Find your twitter handle and enter it into the form below.
     </p>
 
     <h2>Integration Settings</h2>
@@ -27,14 +27,14 @@
         {% csrf_token %}
         <input type="hidden" name="kind" value="twitter" />
         <div class="form-group">
-            <label for="id_twitter" class="col-sm-2 control-label">Twitter id</label>
+            <label for="id_twitter" class="col-sm-2 control-label">Twitter handle</label>
             <div class="col-sm-3">
                 <input
                     id="id_twitter"
                     type="text"
                     class="form-control"
                     name="value"
-                    placeholder="you@example.org">
+                    placeholder="@handle">
             </div>
         </div>
         <div class="form-group">

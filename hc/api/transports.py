@@ -231,8 +231,8 @@ class VictorOps(HttpTransport):
 
 class SMS(HttpTransport):
     # Find these values at https://twilio.com/user/account
-    api = Client(settings.ACCOUNT_SID, settings.AUTH_TOKEN)
-    def notify(self, check, api=api):
+    client = Client(settings.ACCOUNT_SID, settings.AUTH_TOKEN)
+    def notify(self, check, api=client):
         sms = api.api.account.messages.create(
             to=self.channel.value,
             from_=settings.FROM_,

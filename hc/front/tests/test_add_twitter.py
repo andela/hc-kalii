@@ -11,7 +11,7 @@ class AddPushbulletTestCase(BaseTestCase):
     def test_it_shows_instructions(self):
         self.client.login(username="alice@example.org", password="password")
         r = self.client.get("/integrations/add_twitter/")
-        self.assertContains(r, "http://gettwitterid.com/", status_code=200)
+        self.assertContains(r, "twitter handle", status_code=200)
 
     def test_it_adds_twitter(self):
         url = "/integrations/add/"

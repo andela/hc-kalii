@@ -26,8 +26,7 @@ class AddChannelTestCase(BaseTestCase):
 
     def test_instructions_work(self):
         self.client.login(username="alice@example.org", password="password")
-        kinds = ("email", "webhook", "pd", "pushover", "hipchat", "victorops",
-                 "sms", "twitter", "telegram", "slack")
+        kinds = ("email", "webhook", "pd", "pushover", "hipchat", "victorops")
         for frag in kinds:
             url = "/integrations/add_%s/" % frag
             r = self.client.get(url)
