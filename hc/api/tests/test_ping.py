@@ -1,5 +1,5 @@
 from django.test import Client, TestCase
-
+from django.urls import reverse
 from hc.api.models import Check, Ping
 
 
@@ -94,3 +94,26 @@ class PingTestCase(TestCase):
         response = csrf_client.head("/ping/%s/" % self.check.code)
 
         self.assertEqual(response.status_code, 200)
+
+    ###test that a check that runs to often is flagged
+    def test_it_flags_check_that_runs_to_often(self):
+        """checks should not run to often"""
+        #Create test_check
+        test_check = Check.objects.create()
+        self.assertEqual(test_check.status, "new")
+        #ping check to change it's status to up
+        response = self.client.get(
+            reverse("hc-ping", args=[test_check.code])
+        )
+        self.assertEqual(response.status_code, 200)
+        test_check.refresh_from_db()
+        self.assertEqual(test_check.status, "up")
+        self.assertEqual(test_check.often, False)
+        #ping check ti change it status to "often"
+        response = self.client.get(
+            reverse("hc-ping", args=[test_check.code])
+        )
+        self.assertEqual(response.status_code, 200)
+        test_check.refresh_from_db()
+        self.assertEqual(test_check.status, "up")
+        self.assertEqual(test_check.often, True)
