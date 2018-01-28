@@ -11,6 +11,9 @@ import twitter
 import telegram
 
 
+
+telegram_api = telegram.Bot(token=settings.TELEGRAM_TOKEN)
+
 def tmpl(template_name, **ctx):
     template_path = "integrations/%s" % template_name
     return render_to_string(template_path, ctx).strip()
@@ -233,6 +236,7 @@ class SMS(HttpTransport):
     # Find these values at https://twilio.com/user/account
     client = Client(settings.ACCOUNT_SID, settings.AUTH_TOKEN)
     def notify(self, check, api=client):
+        if api is None: api = SMS.client
         sms = api.api.account.messages.create(
             to=self.channel.value,
             from_=settings.FROM_,
@@ -245,6 +249,7 @@ class Twitter(HttpTransport):
                         access_token_key=settings.ACCESS_TOKEN_KEY,
                         access_token_secret=settings.ACCESS_TOKEN_SECRETE)
     def notify(self, check, api=api):
+        if api is None: api = Twitter.api
         tweet = api.PostUpdate(
             self.channel.value + ' ' + custom_message(check) +
             '\nSent-' + datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
@@ -253,5 +258,6 @@ class Twitter(HttpTransport):
 class Telegram(HttpTransport):
     api = telegram.Bot(token=settings.TELEGRAM_TOKEN)
     def notify(self, check, api=api):
+        if api is None: api = Telegram.api
         send = api.send_message(
             chat_id=self.channel.value, text=custom_message(check))
