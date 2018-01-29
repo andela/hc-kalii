@@ -57,6 +57,7 @@ class Check(models.Model):
     interval = models.DurationField(default=DEFAULT_NAG)
     nag_after = models.DateTimeField(null=True, blank=True, editable=True)
     nag_status = models.BooleanField(default=True)
+    is_alerted = models.BooleanField(default=False)
 
     def name_then_code(self):
         if self.name:
