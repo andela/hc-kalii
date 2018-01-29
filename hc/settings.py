@@ -157,9 +157,24 @@ EMAIL_PORT = os.environ['EMAIL_PORT']
 EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
 EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 EMAIL_USE_TLS = os.environ['EMAIL_USE_TLS']
+
 # Slack integration -- override these in local_settings
-SLACK_CLIENT_ID = None
-SLACK_CLIENT_SECRET = None
+SLACK_CLIENT_ID = os.environ['SLACK_CLIENT_ID']
+SLACK_CLIENT_SECRET = os.environ['SLACK_CLIENT_SECRET']
+
+# Twitter integration
+CONSUMER_KEY=os.environ['CONSUMER_KEY']
+CONSUMER_SECRET=os.environ['CONSUMER_SECRET']
+ACCESS_TOKEN_KEY=os.environ['ACCESS_TOKEN_KEY']
+ACCESS_TOKEN_SECRETE=os.environ['ACCESS_TOKEN_SECRETE']
+
+# SMS integration
+ACCOUNT_SID=os.environ['ACCOUNT_SID']
+AUTH_TOKEN=os.environ['AUTH_TOKEN']
+FROM_=os.environ['FROM_']
+
+# Telegram integration
+TELEGRAM_TOKEN = os.environ['TELEGRAM_TOKEN']
 
 # Pushover integration -- override these in local_settings
 PUSHOVER_API_TOKEN = None

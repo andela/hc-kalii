@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load compress humanize staticfiles hc_extras %}
+
+{% block title %}Notification Channels - healthchecks.io{% endblock %}
+
+
+{% block content %}
+<div class="row">
+<div class="col-sm-12">
+    <h1>Twitter</h1>
+
+    <p>Get tweeted when check goes up or down.</p>
+
+    <p>
+        <strong>Tip:</strong>
+        Add multiple twitter twitter handles to notify multiple team members.
+    </p>
+
+    <p>
+        <strong>Instructions.</strong>
+        Find your twitter handle and enter it into the form below.
+    </p>
+
+    <h2>Integration Settings</h2>
+
+    <form method="post" class="form-horizontal" action="{% url 'hc-add-channel' %}">
+        {% csrf_token %}
+        <input type="hidden" name="kind" value="twitter" />
+        <div class="form-group">
+            <label for="id_twitter" class="col-sm-2 control-label">Twitter handle</label>
+            <div class="col-sm-3">
+                <input
+                    id="id_twitter"
+                    type="text"
+                    class="form-control"
+                    name="value"
+                    placeholder="@handle">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">Save Integration</button>
+            </div>
+        </div>
+    </form>
+</div>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+{% compress js %}
+<script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+{% endcompress %}
+{% endblock %}
