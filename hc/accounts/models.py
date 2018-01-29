@@ -24,6 +24,13 @@ class Profile(models.Model):
     token = models.CharField(max_length=128, blank=True)
     api_key = models.CharField(max_length=128, blank=True)
     current_team = models.ForeignKey("self", null=True)
+    # Report subscription periods
+    REPORT_PERIOD_CHOICES = (
+        (1, 'daily'),
+        (7, 'weekly'),
+        (30, 'monthly'),
+    )
+    report_period = models.SmallIntegerField(choices=REPORT_PERIOD_CHOICES, default=30)
 
     def __str__(self):
         return self.team_name or self.user.email
@@ -56,7 +63,7 @@ class Profile(models.Model):
     def send_report(self):
         # reset next report date first:
         now = timezone.now()
-        self.next_report_date = now + timedelta(days=30)
+        self.next_report_date = now + timedelta(days=self.report_period)
         self.save()
 
         token = signing.Signer().sign(uuid.uuid4())
@@ -66,7 +73,8 @@ class Profile(models.Model):
         ctx = {
             "checks": self.user.check_set.order_by("created"),
             "now": now,
-            "unsub_link": unsub_link
+            "unsub_link": unsub_link,
+            "period": self.get_report_period_display()
         }
 
         emails.report(self.user.email, ctx)

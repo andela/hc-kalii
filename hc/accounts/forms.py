@@ -1,4 +1,5 @@
 from django import forms
+from hc.accounts.models import Profile
 
 
 class LowercaseEmailField(forms.EmailField):
@@ -15,7 +16,8 @@ class EmailPasswordForm(forms.Form):
 
 class ReportSettingsForm(forms.Form):
     reports_allowed = forms.BooleanField(required=False)
-
+    report_period = forms.ChoiceField(choices=Profile.REPORT_PERIOD_CHOICES, \
+            widget=forms.Select())
 
 class SetPasswordForm(forms.Form):
     password = forms.CharField()

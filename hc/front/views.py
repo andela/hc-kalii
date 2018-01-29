@@ -421,6 +421,24 @@ def add_email(request):
 
 
 @login_required
+def add_sms(request):
+    ctx = {"page": "channels"}
+    return render(request, "integrations/add_sms.html", ctx)
+
+
+@login_required
+def add_twitter(request):
+    ctx = {"page": "channels"}
+    return render(request, "integrations/add_twitter.html", ctx)
+
+
+@login_required
+def add_telegram(request):
+    ctx = {"page": "channels"}
+    return render(request, "integrations/add_telegram.html", ctx)
+
+
+@login_required
 def add_webhook(request):
     if request.method == "POST":
         form = AddWebhookForm(request.POST)

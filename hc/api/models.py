@@ -17,7 +17,8 @@ STATUSES = (
     ("up", "Up"),
     ("down", "Down"),
     ("new", "New"),
-    ("paused", "Paused")
+    ("paused", "Paused"),
+    ("often", "Often"),
 )
 DEFAULT_TIMEOUT = td(days=1)
 DEFAULT_GRACE = td(hours=1)
@@ -26,7 +27,8 @@ DEFAULT_NAG = td(hours=1)
 CHANNEL_KINDS = (("email", "Email"), ("webhook", "Webhook"),
                  ("hipchat", "HipChat"),
                  ("slack", "Slack"), ("pd", "PagerDuty"), ("po", "Pushover"),
-                 ("victorops", "VictorOps"))
+                 ("victorops", "VictorOps"), ("sms", "SMS"),
+                 ("twitter", "Twitter"), ("telegram", "Telegram"))
 
 PO_PRIORITIES = {
     -2: "lowest",
@@ -57,6 +59,7 @@ class Check(models.Model):
     interval = models.DurationField(default=DEFAULT_NAG)
     nag_after = models.DateTimeField(null=True, blank=True, editable=True)
     nag_status = models.BooleanField(default=True)
+    often = models.BooleanField(default=False)
 
     def name_then_code(self):
         if self.name:
@@ -73,8 +76,13 @@ class Check(models.Model):
     def email(self):
         return "%s@%s" % (self.code, settings.PING_EMAIL_DOMAIN)
 
+    def send_often_status(self):
+        self.status = "often"
+        self.send_alert()
+        self.status = "up"
+
     def send_alert(self):
-        if self.status not in ("up", "down"):
+        if self.status not in ("up", "down", "often"):
             raise NotImplementedError("Unexpected status: %s" % self.status)
 
         errors = []
@@ -96,6 +104,9 @@ class Check(models.Model):
 
         if self.last_ping + self.timeout + self.grace==now:
             return "nag"
+
+        if self.often and (now - self.last_ping) < (self.timeout + self.grace):
+            return "often"
 
         return "down"
 
@@ -192,13 +203,19 @@ class Channel(models.Model):
             return transports.Pushbullet(self)
         elif self.kind == "po":
             return transports.Pushover(self)
+        elif self.kind == "sms":
+            return transports.SMS(self)
+        elif self.kind == "twitter":
+            return transports.Twitter(self)
+        elif self.kind == "telegram":
+            return transports.Telegram(self)
         else:
             raise NotImplementedError("Unknown channel kind: %s" % self.kind)
 
-    def notify(self, check):
+    def notify(self, check, api=None):
         # Make 3 attempts--
         for x in range(0, 3):
-            error = self.transport.notify(check) or ""
+            error = self.transport.notify(check, api) or ""
             if error in ("", "no-op"):
                 break  # Success!
 

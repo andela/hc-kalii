@@ -1,22 +1,26 @@
-from datetime import timedelta
 import time
+import logging
+from datetime import timedelta
 
+from concurrent.futures import ThreadPoolExecutor
 from django.core.management.base import BaseCommand
 from django.db.models import Q
 from django.utils import timezone
 from hc.accounts.models import Profile
 from hc.api.models import Check
 
+executor = ThreadPoolExecutor(max_workers=10)
+logger = logging.getLogger(__name__)
 
 def num_pinged_checks(profile):
-    q = Check.objects.filter(user_id=profile.user.id,)
-    q = q.filter(last_ping__isnull=False)
-    return q.count()
-
+    """ Check for number of currently pinged checks """
+    checks = Check.objects.filter(user_id=profile.user.id,)
+    checks = checks.filter(last_ping__isnull=False)
+    return checks.count()
 
 class Command(BaseCommand):
-    help = 'Send due monthly reports'
-    tmpl = "Sending monthly report to %s"
+    help = 'Send due reports'
+    tmpl = "Sending report to %s"
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -27,34 +31,46 @@ class Command(BaseCommand):
             help='Keep running indefinitely in a 300 second wait loop',
         )
 
-    def handle_one_run(self):
+    def handle_many(self):
+        """ Send reports for many users simultaneously. """
         now = timezone.now()
-        month_before = now - timedelta(days=30)
-
+        day_before = now - timedelta(days=1)
         report_due = Q(next_report_date__lt=now)
         report_not_scheduled = Q(next_report_date__isnull=True)
 
-        q = Profile.objects.filter(report_due | report_not_scheduled)
-        q = q.filter(reports_allowed=True)
-        q = q.filter(user__date_joined__lt=month_before)
-        sent = 0
-        for profile in q:
-            if num_pinged_checks(profile) > 0:
-                self.stdout.write(self.tmpl % profile.user.email)
-                profile.send_report()
-                sent += 1
+        reports = Profile.objects.filter(report_due | report_not_scheduled)
+        reports = reports.filter(reports_allowed=True)
+        reports = reports.filter(user__date_joined__lt=day_before)
 
-        return sent
+        if not reports:
+            return False
+
+        futures = [executor.submit(self.handle_one_run, profile) for profile in reports]
+        for future in futures:
+            future.result()
+
+        return True
+
+    def handle_one_run(self, profile):
+        """ Handle sending on one report. """
+        if num_pinged_checks(profile) > 0:
+            self.stdout.write(self.tmpl % profile.user.email)
+            profile.send_report()
+
+        return True
 
     def handle(self, *args, **options):
-        if not options["loop"]:
-            return "Sent %d reports" % self.handle_one_run()
-
+        """" Handle sending of reports continuously. """
         self.stdout.write("sendreports is now running")
+
+        ticks = 0
         while True:
-            self.handle_one_run()
+            if self.handle_many():
+                ticks = 1
+            else:
+                ticks += 1
 
-            formatted = timezone.now().isoformat()
-            self.stdout.write("-- MARK %s --" % formatted)
-
-            time.sleep(300)
+            time.sleep(1)
+            if ticks % 60 == 0:
+                formatted = timezone.now().isoformat()
+                self.stdout.write("-- MARK %s --" % formatted)
