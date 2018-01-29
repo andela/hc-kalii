@@ -144,6 +144,29 @@ def docs_api(request):
 
     return render(request, "front/docs_api.html", ctx)
 
+def getting_started(request):
+    ctx = {
+        "page": "docs",
+        "section": "getting_started",
+        "SITE_ROOT": settings.SITE_ROOT,
+        "PING_ENDPOINT": settings.PING_ENDPOINT,
+        "default_timeout": int(DEFAULT_TIMEOUT.total_seconds()),
+        "default_grace": int(DEFAULT_GRACE.total_seconds())
+    }
+
+    return render(request, "front/docs_starting.html", ctx)
+
+def faq(request):
+    ctx = {
+        "page": "docs",
+        "section": "faq",
+        "SITE_ROOT": settings.SITE_ROOT,
+        "PING_ENDPOINT": settings.PING_ENDPOINT,
+        "default_timeout": int(DEFAULT_TIMEOUT.total_seconds()),
+        "default_grace": int(DEFAULT_GRACE.total_seconds())
+    }
+
+    return render(request, "front/docs_faq.html", ctx)
 
 def about(request):
     ctx = {

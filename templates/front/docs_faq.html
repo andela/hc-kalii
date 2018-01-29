@@ -1,0 +1,58 @@
+{% extends "front/base_docs.html" %}
+{% load staticfiles %}
+
+{% block title %}FAQ - healthchecks.io{% endblock %}
+
+{% block docs_content %}
+<div class="faq">
+<h2>Frequently Asked Questions</h2>
+<h2>General</h2>
+<a name="What is Healthchecks?"></a>
+<h2 class="rule">What is Healthchecks?</h2>
+<p>
+    Healthchecks is a monitoring tool for cron, Heroku Scheduler, or any periodic process.<br/>
+    Healthchecks will notify you when your scheduled tasks don't run so you can investigate before it becomes a problem.
+</p>
+
+<a name="Why would I need this?"></a>
+<h2 class="rule">Why would I need this?</h2>
+
+<p>
+    A stitch in time saves nine.<br/>
+    Have you ever had a backup fail or an email campaign not go out?<br/>
+    Healthchecks will tell you right away when something doesn't happen so you can fix it.
+</p>
+<a name="What is a check?"></a>
+<h2 class="rule">What is a check?</h2>
+
+<p>
+    A check looks like this: <br/><div class="highlight"><pre>
+    $ curl https://hc-kalii.herokuapp.com/ping/a3161eb8-368d-480b-aa22-1952dd85cac6.
+    </pre></div><br/>
+    It's a unique URL we create for you to add to jobs you want monitored.
+</p>
+<p>
+    The response message is a simple <span class="api-path">200</span> and string <span class="api-path">OK</span>
+</p>
+<a name="How is this different?"></a>
+ <h2 class="rule">Cron already sends me output. How is this different?
+</h2>
+<p>
+    Receiving an email when cron is working can be helpful, but it's hard to tell when things don't run.<br/>
+    The lack of an email in your inbox is hard to detect. <br/>
+    Healthchecks solves this problem by sending you an email if your task hasn't checked in when it should.<br/>
+    A second email notification will be sent once your task begins reporting again.
+</p>
+<a name="Which programming language?"></a>
+<h2 class="rule">Which programming language can I use Healthchecks with?</h2>
+<p>
+    Any language that can fetch a URL.
+</p>
+<a name="Who are you?"></a>
+<h2 class="rule">Who are you?</h2>
+<p>
+    healthchecks.io is an open source project. The code is on <a href="https://github.com/andela/hc-kalii">GitHub</a>,<br/>
+    it has BSD license, and is accepting contributions.
+</p>
+</div>
+{% endblock %}
