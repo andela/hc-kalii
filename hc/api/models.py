@@ -12,6 +12,8 @@ from django.urls import reverse
 from django.utils import timezone
 from hc.api import transports
 from hc.lib import emails
+from hc.accounts.models import Member
+
 
 STATUSES = (
     ("up", "Up"),
@@ -79,7 +81,12 @@ class Check(models.Model):
 
     def send_often_status(self):
         self.status = "often"
-        self.send_alert()
+        members = Member.objects.filter(
+            team=self.user.profile).all()
+        for member in members:
+            if member.priority == "LOW":
+                self.send_alert()
+            continue
         self.status = "up"
 
     def send_alert(self):
