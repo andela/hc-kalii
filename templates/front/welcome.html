@@ -4,103 +4,16 @@
 {% block containers %}
 <div class="index-bleed">
 <div class="container">
+    <div class="front-line">
     <div class="row">
     <div class="col-sm-12">
         <h1 id="pitch">Cron Monitoring. Get Notified When Your Cron Jobs Fail.</h1>
-    </div>
-    </div>
-
-    <div class="row">
-    <div class="col-sm-6 col-sm-push-6">
-        <p id="pitch-text">Make a HTTP GET request to this address from your cron job, daemon, script or long running task.
-        <strong>When this address is not requested for a set time period, you will get alerted.</strong> Below are snippets that are ready to be copy/pasted into your own scripts.</p>
-    </div>
-    <div class="col-sm-6 col-sm-pull-6">
-        <h2 id="pitch-subtitle">Here's an unique ping address for you:</h2>
-        <div id="pitch-url">
-            <input
-                id="pitch-url-input"
-                class="form-control"
-                type="text"
-                value="{{ ping_url }}"
-                readonly />
+        <div id="pitch-small">
+        <span class="element"></span>
         </div>
     </div>
-    </div>
-
-
-    <div class="row">
-        <div class="col-sm-12">
-            <ul class="nav nav-tabs" role="tablist">
-                <li class="active">
-                    <a href="#crontab" data-toggle="tab">Crontab</a>
-                </li>
-                <li>
-                    <a href="#bash" data-toggle="tab">Bash</a>
-                </li>
-                <li>
-                    <a href="#python" data-toggle="tab">Python</a>
-                </li>
-                <li class="hidden-xs">
-                    <a href="#node" data-toggle="tab">Node.js</a>
-                </li>
-                <li class="hidden-xs">
-                    <a href="#php" data-toggle="tab">PHP</a>
-                </li>
-                <li class="hidden-xs">
-                    <a href="#browser" data-toggle="tab">Browser</a>
-                </li>
-                <li class="hidden-xs">
-                    <a href="#powershell" data-toggle="tab">PowerShell</a>
-                </li>
-                <li class="hidden-xs">
-                    <a href="#email" data-toggle="tab">Email</a>
-                </li>
-            </ul>
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="crontab">
-                    {% include "front/snippets/crontab.html" %}
-                </div>
-                <div role="tabpanel" class="tab-pane" id="bash">
-                    {% include "front/snippets/bash.html" %}
-                </div>
-                <div role="tabpanel" class="tab-pane" id="python">
-                    {% include "front/snippets/python.html" %}
-                </div>
-                <div role="tabpanel" class="tab-pane" id="node">
-                    {% include "front/snippets/node.html" %}
-                </div>
-                <div role="tabpanel" class="tab-pane" id="php">
-                    {% include "front/snippets/php.html" %}
-                </div>
-                <div class="tab-pane" id="browser">
-                    {% include "front/snippets/browser.html" %}
-                </div>
-                <div class="tab-pane" id="powershell">
-                    {% include "front/snippets/powershell.html" %}
-                </div>
-                <div class="tab-pane" id="email">
-                    <div class="instructions">
-                        As an alternative to HTTP/HTTPS requests,
-                        you can "ping" this check by sending an
-                        email message to
-                        <div class="email-address">
-                            <code>{{ check.email }}</code>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-
-<div class="get-started-bleed">
-<div class="container">
-    <div class="row">
-        <div id="get-started" class="col-sm-6 col-sm-offset-3">
-            <h2>E-mail Address to Receive Alerts:</h2>
-            <form action="{% url 'hc-login' %}" method="post">
+        <div class="first-login">
+            <form class="form-inline" action="{% url 'hc-login' %}" method="post">
                 {% csrf_token %}
 
                 <div class="form-group">
@@ -114,18 +27,19 @@
                             placeholder="Email">
                     </div>
                 </div>
-
-                <div class="clearfix">
-                    <button type="submit" class="btn btn-lg btn-primary pull-right">
+                    <button type="submit" class="btn btn-lg btn-primary">
                         Get Started
                     </button>
-                </div>
             </form>
-
         </div>
     </div>
-</div>
-</div>
+        <div class="intro">
+        <img
+            class="img-responsive"
+            src="{% static 'img/intro.gif' %}"
+            alt="Intro gif" />
+        </div>
+    </div>
 
 <div class="container">
     <div class="row">
@@ -334,6 +248,23 @@
 <script src="{% static 'js/collapse-native.js' %}"></script>
 <script src="{% static 'js/tab-native.js' %}"></script>
 <script src="{% static 'js/welcome.js' %}"></script>
+<script src="https://cdn.rawgit.com/mattboldt/typed.js/master/lib/typed.min.js"></script>
+
+<script>
+
+  var typed = new Typed('.element', {
+  strings: ["Instant alerts when your web services fail","Instant alerts when your tasks don't run on schedule",
+            "Easily Integrate and collaborate with <strong>teams</strong>",
+            "<strong>Start</strong> sleeping better at night",
+            ""],
+    typeSpeed: 60,
+    backSpeed: 30,
+    backDelay: 750,
+    startDelay: 1000,
+    loop: true,
+  });
+
+</script>
 {% endcompress %}
 {% endblock %}
 
