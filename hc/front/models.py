@@ -13,7 +13,7 @@ class Category(models.Model):
     name = models.CharField(max_length=100)
 
     def ___str__(self):
-        return f"{self.name}"
+        return self.name
 
 class Blog_post(models.Model):
     '''
@@ -31,7 +31,7 @@ class Blog_post(models.Model):
 
     def ___str__(self):
         '''Representation of string output from the database'''
-        return f"{self.title}"
+        return self.title
 
 class Comment(models.Model):
     '''
@@ -45,5 +45,5 @@ class Comment(models.Model):
     published = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return f"{self.comment}"
+        return self.comment
 
