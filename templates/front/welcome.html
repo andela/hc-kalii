@@ -1,19 +1,45 @@
 {% extends "base.html" %}
 {% load compress humanize staticfiles %}
-
+{%block 'logo'%}
+<div class="everything">
+<a class="navbar-brand"
+    href="{% url 'hc-index' %}"
+    title="healthchecks.io - Monitor Cron Jobs">
+    {% if request.user.is_authenticated %}
+    <img
+        id="logo"
+        height="50"
+        width="59"
+        src="{% static 'img/logo.png'%}"
+        srcset="{% static 'img/logo.png'%} 1x, {% static 'img/logo@2x.png'%} 2x"
+        alt="healthchecks.io">
+    {% else %}
+    <img
+        id="logo"
+        src="{% static 'img/logo.png'%}"
+        srcset="{% static 'img/logo.png'%} 1x, {% static 'img/logo@2x.png'%} 2x"
+        alt="healthchecks.io">
+        <span>Healthchecks</span>
+    {% endif %}
+</a>
+{%endblock%}
 {% block containers %}
 <div class="index-bleed">
-<div class="container">
-    <div class="front-line">
-    <div class="Advert">
-    <div class="col-sm-12">
-        <h1 id="pitch">Cron Monitoring. Get Notified When Your Cron Jobs Fail.</h1>
-        <div id="pitch-small">
-        <span class="element"></span>
-        </div>
-    </div>
-        <div class="first-login">
-            <form class="form-inline" action="{% url 'hc-login' %}" method="post">
+<div class="container p">
+    <div class="front-line row">
+        <div class="col-sm-7">
+
+            <div class="Advert row">
+                <div class="col-sm-12">
+                    <h1 id="pitch">Cron Monitoring. Get Notified When Your Cron Jobs Fail.</h1>
+                    <div id="pitch-small">
+                    <span class="element"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="first-login row">
+            <form class="form-inline cta" action="{% url 'hc-login' %}" method="post">
                 {% csrf_token %}
 
                 <div class="form-group">
@@ -32,31 +58,26 @@
                     </button>
             </form>
         </div>
-    </div>
-        <div class="intro">
-        <img
-            class="img-responsive"
-            src="{% static 'img/intro.gif' %}"
-            alt="Intro gif" />
+
+        </div>
+        <div class="col-sm-5">
+            <div class="intro">
+            <!--<img-->
+                <!--class="img-responsive"-->
+                <!--src="{% static 'img/intro.gif' %}"-->
+                <!--alt="Intro gif" />-->
+            </div>
         </div>
     </div>
 
+
 <div class="container">
     <div class="row">
-    <div class="col-sm-12">
+    <div class="peek">
         <h2 class="tour-title">A quick peek of what's inside:</h2>
     </div>
     </div>
-
-    <div class="row tour-section">
-    <div class="col-sm-8">
-        <img
-            class="img-responsive"
-            src="{% static 'img/my_checks.png' %}"
-            srcset="{% static 'img/my_checks.png'%} 1x, {% static 'img/my_checks@2x.png'%} 2x"
-            alt="My Checks page" />
-    </div>
-    <div class="col-sm-4">
+    <div class="peek">
         <p>
             A list of your checks, one for each Cron job, daemon or
             periodically running task you want to monitor.
@@ -70,14 +91,8 @@
     </div>
 
     <div class="row tour-section">
-    <div class="col-sm-8">
-        <img
-            class="img-responsive"
-            src="{% static 'img/period_grace.png' %}"
-            srcset="{% static 'img/period_grace.png'%} 1x, {% static 'img/period_grace@2x.png'%} 2x"
-            alt="Period/Grace Time dialog" />
-    </div>
-    <div class="col-sm-4">
+
+    <div class="col-sm-6 increase">
         Each check has configurable <strong>Period</strong> and <strong>Grace Time</strong> parameters.
         Depending on these parameters and time since the last ping, the check is in one of the
         following states:
@@ -125,17 +140,22 @@
         </table>
 
     </div>
+        <img
+            class="img-responsive"
+            src="{% static 'img/period_grace.png' %}"
+            srcset="{% static 'img/period_grace.png'%} 1x, {% static 'img/period_grace@2x.png'%} 2x"
+            alt="Period/Grace Time dialog" />
     </div>
 
     <div class="row tour-section">
-    <div class="col-sm-8">
+    <div class="col-sm-5" style="margin: 2em; ">
         <img
             class="img-responsive"
             src="{% static 'img/channels.png' %}"
             srcset="{% static 'img/channels.png'%} 1x, {% static 'img/channels@2x.png'%} 2x"
             alt="Channels page" />
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-6">
         <p>
             You can set up additional ways to get notified:
         </p>
