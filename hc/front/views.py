@@ -102,6 +102,13 @@ def _welcome_check(request):
 
     return check
 
+@login_required
+def blogs(request):
+    return render(request, "front/blog_landing.html", {})
+
+# def create_blog(request):
+#     return render(request, "front/blog_create.html", {})
+
 
 def index(request):
     if request.user.is_authenticated:
