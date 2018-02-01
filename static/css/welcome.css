@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat');
 
 .p {
-    width: 98%;
+    width: 100%;
     margin: 0 auto;
     margin-right: 0;
     margin-left: 0;
@@ -209,9 +209,6 @@
 }
 
 .teamwork{
-    width: 100%;
-    height: 60vh;
-    padding: 2em;
     text-align: justify;
     font-family: 'Montserrat', sans-serif;
 
@@ -246,4 +243,38 @@
 
 .team-work-svg{
     padding-bottom: 4em;
+    margin-left: 5em;
+    }
+
+.unique-ping{
+    height: 20vh;
+    width: 100%;
+    }
+
+.cron-job {
+    background: #f4f4f4;
+    color:#666;
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.8em;
+    font-size:14px;
+    padding: 4em 8em;
+    }
+
+.row{
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    }
+
+.jumbotron-color {
+    background: #08311b;
+    color: #fff;
+    padding: 5em 5em 1em 5em;
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.8em;
+    font-size:14px;
+    }
+
+.jumbo-bleed-color {
+    background: #08311b;
+
     }
