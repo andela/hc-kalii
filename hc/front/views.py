@@ -17,7 +17,7 @@ from hc.api.decorators import uuid_or_400
 from hc.api.models import DEFAULT_GRACE, DEFAULT_TIMEOUT, Channel, Check, Ping
 from hc.front.forms import (AddChannelForm, AddWebhookForm, NameTagsForm,
                             TimeoutForm)
-
+from hc.api.models import Check
 
 # from itertools recipes:
 def pairwise(iterable):
@@ -38,7 +38,15 @@ def my_checks_helper(request):
 
 @login_required
 def my_checks(request):
-    checks = my_checks_helper(request)[0]
+    checks = []
+    current_user_id = request.user.id
+    if request.team == request.user.profile:
+        owner_checks = Check.objects.filter(user=request.team.user).order_by("created")
+        checks = list(owner_checks)
+    else:
+        user_checks = Check.objects.filter(user=request.team.user, member_access_allowed=True,
+                                  member_access_id=current_user_id).order_by("created")
+        checks = list(user_checks)
     counter = Counter()
     down_tags, grace_tags = set(), set()
     for check in checks:
@@ -53,7 +61,6 @@ def my_checks(request):
                 down_tags.add(tag)
             elif check.in_grace_period():
                 grace_tags.add(tag)
-
     ctx = {
         "page": "checks",
         "checks": checks,
