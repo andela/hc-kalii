@@ -2,6 +2,7 @@ __pycache__/
 *.pyc
 .env
 .coverage
+hc/api/migrations/*
 hc.sqlite
 hc/local_settings.py
 static-collected
