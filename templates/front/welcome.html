@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% load compress humanize staticfiles %}
 {%block 'logo'%}
-<div class="everything">
 <a class="navbar-brand"
     href="{% url 'hc-index' %}"
     title="healthchecks.io - Monitor Cron Jobs">
@@ -60,24 +59,19 @@
         </div>
 
         </div>
-        <div class="col-sm-5">
+        <div class="col-sm-5 hidden-xs hidden-xs ">
             <div class="intro">
-            <!--<img-->
-                <!--class="img-responsive"-->
-                <!--src="{% static 'img/intro.gif' %}"-->
-                <!--alt="Intro gif" />-->
             </div>
         </div>
     </div>
-
-
-<div class="container">
-    <div class="row">
-    <div class="peek">
+</div>
+<div class="tour">
+<div class=" peek">
         <h2 class="tour-title">A quick peek of what's inside:</h2>
     </div>
-    </div>
-    <div class="peek">
+    <div class="row tour-section">
+
+    <div class="col-sm-6 increase">
         <p>
             A list of your checks, one for each Cron job, daemon or
             periodically running task you want to monitor.
@@ -87,12 +81,6 @@
             later. Adjust Period and Grace time to match periodicity
             and duration of your tasks.
         </p>
-    </div>
-    </div>
-
-    <div class="row tour-section">
-
-    <div class="col-sm-6 increase">
         Each check has configurable <strong>Period</strong> and <strong>Grace Time</strong> parameters.
         Depending on these parameters and time since the last ping, the check is in one of the
         following states:
@@ -146,16 +134,52 @@
             srcset="{% static 'img/period_grace.png'%} 1x, {% static 'img/period_grace@2x.png'%} 2x"
             alt="Period/Grace Time dialog" />
     </div>
-
     <div class="row tour-section">
     <div class="col-sm-5" style="margin: 2em; ">
+        <div class="slack">
         <img
-            class="img-responsive"
-            src="{% static 'img/channels.png' %}"
-            srcset="{% static 'img/channels.png'%} 1x, {% static 'img/channels@2x.png'%} 2x"
-            alt="Channels page" />
+            class="our-icons"
+            src=" {% static 'img/slack.svg'%}"
+            alt="slack"/>
+        <img
+            class="our-icons"
+            src=" {% static 'img/sms.svg'%}"
+            alt="sms"/>
+        </div>
+        <img
+            class="our-icons"
+            src=" {% static 'img/integrations/telegram.png'%}"
+            alt="sms"/>
+        <img
+            class="our-icons"
+            src=" {% static 'img/integrations/twitter.png'%}"
+            alt="sms"/>
+        <img
+            class="our-icons"
+            src=" {% static 'img/integrations/victorops.png'%}"
+            alt="sms"/>
+        <img
+            class="our-icons"
+            src=" {% static 'img/integrations/webhook.png'%}"
+            alt="sms"/>
+        <img
+            class="our-icons"
+            src=" {% static 'img/integrations/pushover.png'%}"
+            alt="sms"/>
+        <img
+            class="our-icons"
+            src=" {% static 'img/integrations/hipchat.png'%}"
+            alt="sms"/>
+        <img
+            class="our-icons"
+            src=" {% static 'img/integrations/pd.png'%}"
+            alt="sms"/>
+        <img
+            class="our-icons"
+            src=" {% static 'img/integrations/email.png'%}"
+            alt="sms"/>
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-6 integration-info">
         <p>
             You can set up additional ways to get notified:
         </p>
@@ -214,8 +238,52 @@
         </table>
     </div>
     </div>
+</div>
+    <div class="hidden-xs hidden-xs">
+    <img
+            class="team-work-svg col-md-5"
+            src=" {% static 'img/team-work.svg'%}"
+            alt="sms"/>
+    </div>
+    <div class="teamwork">
+        <div class="col-sm-4 c-text">
+            <p class="collaborate">
+                Collaboratively create and manage alerts as a <strong>team</strong>.
+            </p>
+            <p>Managing critical alerts
+                is a daunting task.</br>
+                Others more sensitive than others.</p>
+            <p><strong>Healthchecks makes this easy.</strong></p>
+            <p>Manage alerts in teams, resolve issues quicker and monitor alerts better.</p>
+        </div>
+       <img
+            class="col-sm-4 team-hands hidden-xs hidden-xs "
+            src=" {% static 'img/TEAM.png'%}"
+            alt="sms"/>
+        <div class="col-sm-4 c-text">
+            <p class="collaborate">
+                Sleep better at night.
+            </p>
+            <p> All users have an expanded dashboard in their profile setting where they can </br>
+                invite team members, collaborate and
+                and ensure that the right team members are notified with
+                integrations like Telegram, tweeter, Slack, Hipchat and email.</p>
+            <p><strong>We've got you covered</strong></p>
+        </div>
+        <div class="col-sm-4 c-text">
+            <p class="collaborate">
+                create scheduled tasks from a GUI:
+            </p>
+            <p>
+                Health checks provides centralized intuitive dashboard for creating scheduled tasks and periodic task monitoring with alerting.
+                It will also  track your scheduled tasks average run times and alert you when a particular job is running slowly or has failed altogether.
 
-    <div class="row">
+            </p>
+        </div>
+    </div>
+</div>
+
+    <div class="row final-footer">
 
     <div class="footer-jumbo-bleed">
     <div class="col-sm-12">
