@@ -60,6 +60,9 @@ class Check(models.Model):
     nag_after = models.DateTimeField(null=True, blank=True, editable=True)
     nag_status = models.BooleanField(default=True)
     often = models.BooleanField(default=False)
+    # field to allow team mber access to a chechk
+    member_access_allowed = models.BooleanField(default=False)
+    member_access_id = models.IntegerField(default=0)
 
     def name_then_code(self):
         if self.name:
