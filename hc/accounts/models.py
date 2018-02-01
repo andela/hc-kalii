@@ -88,7 +88,7 @@ class Profile(models.Model):
         user.profile.current_team = self
         user.profile.save()
 
-        # update the member access fields in accounts
+        # update the member access fields in check model
         check.member_access_allowed = True
         check.member_access_id = int(user.id)
         check.save()
