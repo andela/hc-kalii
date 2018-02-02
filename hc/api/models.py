@@ -76,11 +76,8 @@ class Check(models.Model):
     interval = models.DurationField(default=DEFAULT_NAG)
     nag_after = models.DateTimeField(null=True, blank=True, editable=True)
     nag_status = models.BooleanField(default=True)
-<<<<<<< HEAD
     often = models.BooleanField(default=False)
-=======
     department = models.ForeignKey(Department, blank=True, null=True)
->>>>>>> [Feature #153727988] Add Department model
 
     def name_then_code(self):
         if self.name:
