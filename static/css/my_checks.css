@@ -79,3 +79,14 @@
  #show-usage-modal .tab-content {
      margin-top: 15px;
  }
+
+ .select-department {
+    padding-top:10px;
+    padding-bottom: 10px;
+}
+
+.select-department-options {
+    border: 1px solid gainsboro;
+    width: 100%;
+    height: 3em;
+}

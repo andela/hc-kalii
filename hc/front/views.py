@@ -14,10 +14,11 @@ from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.six.moves.urllib.parse import urlencode
 from hc.api.decorators import uuid_or_400
-from hc.api.models import DEFAULT_GRACE, DEFAULT_TIMEOUT, Channel, Check, Ping
+from hc.api.models import DEFAULT_GRACE, DEFAULT_TIMEOUT, Channel, Check, Ping, Department
 from hc.front.forms import (AddChannelForm, AddWebhookForm, NameTagsForm,
-                            TimeoutForm)
+                            TimeoutForm, DepartmentForm)
 from hc.api.models import Check
+
 
 # from itertools recipes:
 def pairwise(iterable):
@@ -38,6 +39,8 @@ def my_checks_helper(request):
 
 @login_required
 def my_checks(request):
+    """ Get and display user checks """
+    # prepare checks depending on team leader or other user
     checks = []
     current_user_id = request.user.id
     if request.team == request.user.profile:
@@ -47,6 +50,14 @@ def my_checks(request):
         user_checks = Check.objects.filter(user=request.team.user, member_access_allowed=True,
                                   member_access_id=current_user_id).order_by("created")
         checks = list(user_checks)
+    
+    if request.GET.get('department') and request.GET.get('department') != "all":
+        department = int(request.GET.get('department'))
+    else:
+        department = "all"
+    if department != "all":
+        checks = [check for check in checks if check.department_id == department]
+    depts = Department.objects.all()
     counter = Counter()
     down_tags, grace_tags = set(), set()
     for check in checks:
@@ -64,6 +75,8 @@ def my_checks(request):
     ctx = {
         "page": "checks",
         "checks": checks,
+        "departments": depts,
+        "department": department,
         "now": timezone.now(),
         "tags": counter.most_common(),
         "down_tags": down_tags,
@@ -96,6 +109,7 @@ def failed_checks(request):
     if not failed:
         return redirect('hc-checks')
     return render(request, "front/my_checks.html", ctx)
+
 def _welcome_check(request):
     check = None
     if "welcome_code" in request.session:
@@ -207,6 +221,7 @@ def update_name(request, code):
     if form.is_valid():
         check.name = form.cleaned_data["name"]
         check.tags = form.cleaned_data["tags"]
+        check.department_id = form.cleaned_data["department"]
         check.save()
 
     return redirect("hc-checks")
@@ -632,3 +647,64 @@ def privacy(request):
 
 def terms(request):
     return render(request, "front/terms.html", {})
+
+@login_required
+def departments(request):
+    """ Display departments created by team members """
+    depts = Department.objects.filter(user=request.team.user).order_by("created")
+
+    ctx = {
+        "page": "departments",
+        "departments": depts
+    }
+
+    return render(request, "front/departments.html", ctx)
+
+@login_required
+def add_department(request):
+    """ Add a new department to existing departments """
+    if request.method == "POST":
+        form = DepartmentForm(request.POST)
+        if form.is_valid():
+            department = form.save(commit=False)
+            department.user = request.team.user
+            department.save()
+            messages.success(request, "New department has been added!")
+            return redirect("hc-departments")
+    else:
+        form = DepartmentForm
+
+    ctx = {"page": "add_department", "form": form}
+    return render(request, "front/add_department.html", ctx)
+
+@login_required
+def edit_department(request, department_id):
+    """ Update an existing department """
+    department = get_object_or_404(Department, id=int(department_id))
+
+    if request.method == "POST":
+        form = DepartmentForm(request.POST)
+        if form.is_valid():
+            department.name = form.cleaned_data['name']
+            department.save()
+            messages.success(request, "Department name has been updated!")
+            return redirect("hc-departments")
+    else:
+        form = DepartmentForm()
+
+    ctx = {"page": "edit_department", "department": department, "form": form}
+    return render(request, "front/edit_department.html", ctx)
+
+@login_required
+def remove_department(request, department_id):
+    """ Delete a department """
+    assert request.method == "POST"
+
+    department = get_object_or_404(Department, id=int(department_id))
+    if department.user != request.team.user:
+        return HttpResponseForbidden()
+    department.delete()
+
+    messages.success(request, "Department has been deleted!")
+
+    return redirect("hc-departments")

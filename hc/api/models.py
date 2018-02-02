@@ -41,6 +41,23 @@ PO_PRIORITIES = {
 }
 
 
+class Department(models.Model):
+    """ Team department for job categorization """
+
+    user = models.ForeignKey(User)
+    name = models.CharField(max_length=100)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+    def to_dict(self):
+        result = {
+            "name": self.name,
+            "created": self.created.isoformat()
+        }
+        return result
+
 class Check(models.Model):
 
     class Meta:
@@ -65,6 +82,7 @@ class Check(models.Model):
     # field to allow team member access to a chechk
     member_access_allowed = models.BooleanField(default=False)
     member_access_id = models.IntegerField(default=0)
+    department = models.ForeignKey(Department, blank=True, null=True)
     is_alerted = models.BooleanField(default=False)
 
 

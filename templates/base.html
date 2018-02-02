@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="{% static 'css/log.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/add_pushover.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/settings.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/departments.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/loader.css' %}" type="text/css">
 
     <!-- CSS -->
@@ -137,6 +138,9 @@
                         {% endif %}
 
                         <li><a href="{% url 'hc-profile' %}">Account Settings</a></li>
+                        <li role="separator" class="divider"></li>
+
+                        <li><a href="{% url 'hc-departments' %}">Departments</a></li>
                         <li role="separator" class="divider"></li>
 
                         {% for team in request.teams %}

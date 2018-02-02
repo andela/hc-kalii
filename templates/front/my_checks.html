@@ -32,10 +32,26 @@
         {% endfor %}
     </div>
     {% endif %}
-
 </div>
+
 <div class="row">
     <div class="col-sm-12">
+        <div class="select-department">
+            <select id="filter-checks" class="select-department-options">
+                {% if department == 'all' %}
+                <option value="{% url 'hc-checks' %}?department=all" selected>All departments</option>
+                {% else %}
+                <option value="{% url 'hc-checks' %}?department=all">All departments</option>
+                {% endif %}
+                {% for dept in departments %}
+                {% if department == dept.id %}
+                <option value="{% url 'hc-checks' %}?department={{ dept.id }}" selected>{{ dept.name }}</option>
+                {% else %}
+                <option value="{% url 'hc-checks' %}?department={{ dept.id }}">{{ dept.name }}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
+        </div>
 
 
     {% if checks %}
@@ -64,7 +80,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="update-timeout-title">Name and Tags</h4>
+                    <h4 class="update-timeout-title">Name, Tags &amp; Department</h4>
                 </div>
                 <div class="modal-body">
                         <div class="form-group">
@@ -106,6 +122,28 @@
                                 </span>
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <label for="department" class="col-sm-2 control-label">
+                                Department
+                            </label>
+                            <div class="col-sm-9">
+                                <select name="department">
+                                    <option value="">------------------------</option>
+                                    {% for department in departments %}
+                                    <option
+                                        id="{{ department.id }}"
+                                        value="{{ department.id }}" >{{ department.name }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+
+                                <span class="help-block">
+                                    Optionally, add checks to departments for simple filtering.
+                                </span>
+                            </div>
+                        </div>
+                        
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
