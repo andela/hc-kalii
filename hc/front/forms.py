@@ -1,10 +1,12 @@
 from django import forms
-from hc.api.models import Channel
+from hc.api.models import Channel, Department
 
 
 class NameTagsForm(forms.Form):
     name = forms.CharField(max_length=100, required=False)
     tags = forms.CharField(max_length=500, required=False)
+    department = forms.ModelChoiceField(queryset=Department.objects.all(), \
+            widget=forms.Select(), required=False)
 
     def clean_tags(self):
         l = []
@@ -47,3 +49,14 @@ class AddWebhookForm(forms.Form):
 
     def get_value(self):
         return "{value_down}\n{value_up}".format(**self.cleaned_data)
+
+class DepartmentForm(forms.ModelForm):
+    """ Form for creating/updating a department """
+
+    class Meta:
+        model = Department
+        fields = ['name']
+
+    def clean_name(self):
+        name = self.cleaned_data["name"]
+        return name.strip()
