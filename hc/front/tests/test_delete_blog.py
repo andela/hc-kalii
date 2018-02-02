@@ -14,7 +14,7 @@ class DeleteBlogTest(BaseTestCase):
         url = "/blog/delete_blog/1"
         # data = {'title': ['sajdgjs'], 'content': ['gjsagjdgaj'],'category': ['1']}
         self.client.login(username="alice@example.org", password="password")
-        r = self.client.get(url)
+        r = self.client.post(url)
 
         self.assertEquals(r.status_code, 302)
         assert Blog_post.objects.count() == 0

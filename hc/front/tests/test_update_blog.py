@@ -18,3 +18,4 @@ class UpdateBlogTest(BaseTestCase):
 
         self.assertEquals(r.status_code, 302)
         assert Blog_post.objects.count() == 1
+        
