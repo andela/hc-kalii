@@ -92,9 +92,13 @@ class Command(BaseCommand):
         This method notifies members in the team
         """
         members = Member.objects.filter(
-            team=check.user.profile, priority="HIGH").all()
+            team=check.user.profile).all()
         for member in members:
-            channel = Channel.objects.filter(value=member.user.email).first()
-            error = channel.notify(check)
-            if error not in ("", "no-op"):
-                print("%s, %s" % (channel, error))
+            if member.priority == "LOW" or (member.priority == "HIGH" and not check.is_alerted):
+                channel = Channel.objects.filter(
+                    value=member.user.email).first()
+                check.is_alerted = True
+                check.save()
+                error = channel.notify(check)
+                if error not in ("", "no-op"):
+                    print("%s, %s" % (channel, error))

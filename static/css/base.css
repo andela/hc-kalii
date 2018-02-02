@@ -34,6 +34,8 @@ body {
 #logo {
     max-height: 50px;
     margin-top: -16px;
+    display: inline;
+    float: left;
 }
 
 #nav-main-sections > li > a {
@@ -78,4 +80,15 @@ body {
 
 .dialog-body {
     margin: 24px 0;
+}
+
+.logo-name{
+    font-size: 21px;
+    color: #fff;
+    font-weight: 700;
+    }
+
+.navbar-nav > li > a:hover {
+    padding-top: 30px;
+    padding-bottom: 30px;
 }
