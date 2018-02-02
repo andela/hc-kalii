@@ -17,6 +17,15 @@
     </ul>
     
 </div>
+{% if blogs %}
+    <ul>
+    {% for item in blogs %}
+        <li><a href ="/blog/read_blog/{{item.pk}}" >{{ item.title }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No Blogs exist.</p>
+{% endif %}
 
 {% endblock %}
 

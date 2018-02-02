@@ -127,29 +127,44 @@ def create_blog(request):
     return render(request, "front/blog_create.html", {'form': form, 'form1': blogForm})
 
 def read_blog(request, pk):
+    '''Method to list all the freshly created blogs and link to other functionality'''
     blog = Blog_post.objects.get(pk=pk)
     return render(request, "front/read_blog.html", {'blog': blog})
 
-def edit_blogs(request):
+def list_blog(request):
+    '''Method to list all blogs'''
+    blogs = Blog_post.objects.all()
+    return render(request, "front/list_blog.html", {'blogs': blogs})
+
+def edit_blogs(request, pk):
     '''Method to edit a particular blog'''
+    blog = Blog_post.objects.get(pk=int(pk))
+    categories = Category.objects.all()
+    if request.method == "POST":
+        form = CreateBlogForm(request.POST)
+        if form.is_valid():
+            blog.title = form.cleaned_data['title']
+            blog.content = form.cleaned_data['content']
+            blog.category = form.cleaned_data['category']
+            blog.save()
+            print ('/////////', blog.pk)
+            return redirect(read_blog, pk=blog.pk)
+    else:
+        form = CreateBlogForm()
+        print ('/////////', blog.pk)
+
+        return render(request, "front/blog_edit.html", {'blog': blog, 'categories': categories, 'form': form})
+    
+
+
+
+def delete_blog(request, pk):
+    '''Method to delete an existing blog'''
+    deleted_blog = Blog_post.objects.get(pk=int(pk))
+    Blog_post.objects.get(pk=int(pk)).delete()
     Created = Blog_post.objects.all()
-    blogForm = CreateBlogForm(request.POST)
-    if blogForm.is_bound and blogForm.is_valid():
-        title = blogForm.cleaned_data['title']
-        content = blogForm.cleaned_data['content']
-        published = timezone.now()
-        category = blogForm.cleaned_data['category']
-        user = request.user
-        blog = Blog_post(title=title, content=content, published=published,
-                        category=category, user=user)
-        blog.save()
-    return render(request, "front/blog_edit.html", {'created': Created, 'form': blogForm})
+    return redirect("hc-edit_blog")
 
-# def delete_blog(request):
-#     '''Method to delete an existing blog'''
-#     pass
-
-# use discuss for comments
 
 
 def index(request):

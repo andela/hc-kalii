@@ -12,21 +12,60 @@
             </li>
 
             <li {% if page == 'blogs' %} class="active" {% endif %}>
-                <a href="{% url 'hc-edit_blog' %}">List Blogs</a>
+                <a href="{% url 'hc-list_blog' %}">List Blogs</a>
             </li>
     </ul>
     
 </div>
-{% if created %}
-    <ul>
-    {% for item in created %}
-        <li><a href="/blog/read_blog/{{item.pk}}">{{ item.title }} </a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No Blogs exist.</p>
-{% endif %}
+<form method="post" class="form-horizontal" action="/blog/edit_blogs/{{blog.pk}}">
+        {% csrf_token %}
+        <div class="form-group">
+            <div class="col-sm-6">
+               <input
+                    id="id_title"
+                    type="text"
+                    class="form-control"
+                    name="title"
+                    value="{{ blog.title }}"
+                    placeholder="Blog Title">
+            </div>
+        </div>
 
+        <div class="form-group">
+            <div class="col-sm-6">
+                <input
+                    id="id_content"
+                    type="text"
+                    class="form-control"
+                    name="content"
+                    value="{{ blog.content }}"
+                    placeholder="Blog Content">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="category" class="col-sm-2 control-label">
+                Category
+            </label>
+            <div class="col-sm-9">
+                <select name="category">
+                    {% for category in categories %}
+                    <option
+                        value="{{ category.id }}" >{{ category.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-6">
+                <button type="submit" class="btn btn-primary btn-lg">Edit Data</button>
+            </div>
+        </div>
+    </form>
+    {% comment %} <script src="https://cdn.ckeditor.com/4.7.3/standard/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace('id_content')
+    </script>  {% endcomment %}
 {% endblock %}
 
 {% block scripts %}

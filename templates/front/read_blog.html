@@ -12,18 +12,27 @@
             </li>
 
             <li {% if page == 'blogs' %} class="active" {% endif %}>
-                <a href="{% url 'hc-edit_blog' %}">Edit Blog</a>
+                <a href="{% url 'hc-list_blog' %}">Edit Blog</a>
             </li>
     </ul>
     
 </div>
 
 {% if blog %}
+    <div>
     <p><strong>Blog Title: </strong>{{blog.title}}</p>
     <p><strong>Blog Content: </strong>{{blog.content}}</p>
     <p><strong> Date Published: </strong>{{blog.published}} </p>
     <p><strong>Blog Category: </strong>{{blog.category}}</p>
-    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#">Edit Category</button><button type="button" class="btn btn-danger" data-toggle="collapse" data-target="#">Delete Category</button>
+    <div class="row">
+            <div class="col-sm-6">
+                <a class="btn btn-primary btn-lg" href="{% url 'hc-delete_blog' blog.pk%}" role="button">Delete Blog</a>
+            </div>
+            <div class="col-sm-6">
+                    <a class="btn btn-primary btn-lg" href="{% url 'hc-edit_blog' blog.pk %}" role="button">Edit Blog</a>
+            </div>
+         </div>
+    </div>
 
 {% else %}
     <p>Nothing was created.</p>
