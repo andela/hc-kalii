@@ -2,7 +2,7 @@ from hc.api.models import Department
 from hc.test import BaseTestCase
 
 
-class AddDepartmentTestCase(BaseTestCase):
+class ListDepartmentTestCase(BaseTestCase):
     """ Test for department listing """
 
     def test_departments_can_be_listed(self):
