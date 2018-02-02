@@ -15,6 +15,6 @@ class UpdateBlogTest(BaseTestCase):
         data = {'title': ['sajdgjs'], 'content': ['gjsagjdgaj'],'category': ['1']}
         r = self.client.post(self.url, data)
 
-        self.assertEquals(r.status_code, 200)
+        self.assertEquals(r.status_code, 302)
         assert Blog_post.objects.count() == 1
 
