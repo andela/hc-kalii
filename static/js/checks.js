@@ -132,6 +132,11 @@ $(function () {
         $("#update-tags-input").val($this.data("tags"));
         $('#update-name-modal').modal("show");
         $("#update-name-input").focus();
+        $("#" + $this.data("department")).attr("selected", true);
+
+        $('#update-name-modal').on('hidden.bs.modal', function () {
+            location.reload();
+           })
 
         return false;
     });
@@ -232,6 +237,17 @@ $(function () {
         var text = e.trigger.getAttribute("data-clipboard-text");
         prompt("Press Ctrl+C to select:", text)
     });
+
+    // Filter checks by department
+    $(function(){
+        $('#filter-checks').on('change', function () {
+          var url = $(this).val();
+          if (url) {
+          window.location = url;
+          }
+          return false;
+        });
+      });
 
 
 });
