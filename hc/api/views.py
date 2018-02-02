@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from hc.api import schemas
 from hc.api.decorators import check_api_key, uuid_or_400, validate_json
-from hc.api.models import Check, Ping
+from hc.api.models import Department, Check, Ping
 from hc.lib.badges import check_signature, get_badge_svg
 
 
@@ -62,11 +62,13 @@ def checks(request):
             check.timeout = td(seconds=request.json["timeout"])
         if "grace" in request.json:
             check.grace = td(seconds=request.json["grace"])
+        if "department_id" in request.json:
+            check.department_id = int(request.json.get("department_id", ""))
 
         check.save()
 
         # This needs to be done after saving the check, because of
-        # the M2M relation between checks and channels:
+        # the M2M relation between checks and channels/departments:
         if request.json.get("channels") == "*":
             check.assign_all_channels()
 
@@ -113,3 +115,20 @@ def badge(request, username, signature, tag):
 
     svg = get_badge_svg(tag, status)
     return HttpResponse(svg, content_type="image/svg+xml")
+
+@csrf_exempt
+@check_api_key
+def departments(request):
+    """ List departments or create new team department """
+    if request.method == "GET":
+        depts = Department.objects.filter(user=request.user)
+        doc = {"departments": [department.to_dict() for department in depts]}
+        return JsonResponse(doc)
+
+    elif request.method == "POST":
+        department = Department(user=request.user, name=str(request.json.get("name", "")))
+        department.save()
+        department.save()
+        return JsonResponse(department.to_dict(), status=201)
+
+    return HttpResponse(status=405)
