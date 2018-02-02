@@ -39,6 +39,23 @@ PO_PRIORITIES = {
 }
 
 
+class Department(models.Model):
+    """ Team department for job categorization """
+
+    user = models.ForeignKey(User)
+    name = models.CharField(max_length=100)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+    def to_dict(self):
+        result = {
+            "name": self.name,
+            "created": self.created.isoformat()
+        }
+        return result
+
 class Check(models.Model):
 
     class Meta:
@@ -59,7 +76,11 @@ class Check(models.Model):
     interval = models.DurationField(default=DEFAULT_NAG)
     nag_after = models.DateTimeField(null=True, blank=True, editable=True)
     nag_status = models.BooleanField(default=True)
+<<<<<<< HEAD
     often = models.BooleanField(default=False)
+=======
+    department = models.ForeignKey(Department, blank=True, null=True)
+>>>>>>> [Feature #153727988] Add Department model
 
     def name_then_code(self):
         if self.name:
