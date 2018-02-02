@@ -138,6 +138,8 @@ def profile(request):
         profile.current_team_id = profile.id
         profile.save()
 
+    checks_db = Check.objects.filter(user=request.user).order_by('created')
+    checks = list(checks_db)
     show_api_key = False
     if request.method == "POST":
         if "set_password" in request.POST:
@@ -170,12 +172,13 @@ def profile(request):
             if form.is_valid():
 
                 email = form.cleaned_data["email"]
+                check_name = form.cleaned_data["check"]
                 try:
                     user = User.objects.get(email=email)
                 except User.DoesNotExist:
                     user = _make_user(email)
-
-                profile.invite(user)
+                check_obj = Check.objects.get(name=check_name)
+                profile.invite(user, check_obj)
                 messages.success(request, "Invitation to %s sent!" % email)
         elif "remove_team_member" in request.POST:
             form = RemoveTeamMemberForm(request.POST)
@@ -229,6 +232,7 @@ def profile(request):
 
     ctx = {
         "page": "profile",
+        "checks": checks,
         "badge_urls": badge_urls,
         "profile": profile,
         "show_api_key": show_api_key
