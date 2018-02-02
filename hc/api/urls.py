@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^api/v1/checks/$', views.checks),
     url(r'^api/v1/checks/([\w-]+)/pause$', views.pause, name="hc-api-pause"),
     url(r'^badge/([\w-]+)/([\w-]{8})/([\w-]+).svg$', views.badge, name="hc-badge"),
+    url(r'^api/v1/departments/$', views.departments, name="hc-api-departments"),
 ]
