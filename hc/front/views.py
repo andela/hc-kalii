@@ -46,7 +46,7 @@ def my_checks(request):
         department = "all"
     if department != "all":
         checks = [check for check in checks if check.department_id == department]
-    depts = Department.objects.all(user=request.team.user)
+    depts = Department.objects.filter(user=request.team.user)
     counter = Counter()
     down_tags, grace_tags = set(), set()
     for check in checks:
