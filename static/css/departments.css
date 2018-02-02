@@ -1,0 +1,31 @@
+#departments-table {
+    margin-top: 36px;
+}
+
+#departments-table .departments-row:hover {
+    background-color: #f5f5f5;
+}
+
+#departments-table th {
+    border-top: 0;
+}
+
+#departments-table td {
+    vertical-align: middle;
+}
+
+.department-menu {
+    visibility: hidden;
+}
+
+.department-menu .icon-settings {
+    font-size: 16px;
+}
+
+.dropdown-menu > li > a.department-menu-remove {
+    color: #B71C1C;
+}
+
+tr:hover .department-menu {
+    visibility: visible;
+}
