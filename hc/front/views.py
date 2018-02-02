@@ -41,7 +41,10 @@ def my_checks(request):
     """ Get and display all user checks """
     checks = my_checks_helper(request)[0]
     if request.GET.get('department') and request.GET.get('department') != "all":
-        department = int(request.GET.get('department'))
+        try:
+            department = int(request.GET.get('department'))
+        except ValueError:
+            raise Http404("Department specified cannot be found.")
     else:
         department = "all"
     if department != "all":
