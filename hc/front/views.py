@@ -16,7 +16,7 @@ from django.utils.six.moves.urllib.parse import urlencode
 from hc.api.decorators import uuid_or_400
 from hc.api.models import DEFAULT_GRACE, DEFAULT_TIMEOUT, Channel, Check, Ping
 from hc.front.forms import (AddChannelForm, AddWebhookForm, NameTagsForm,
-                            TimeoutForm)
+                            TimeoutForm, CreateCategoryForm, CreateBlogForm)
 
 
 # from itertools recipes:
@@ -102,12 +102,34 @@ def _welcome_check(request):
 
     return check
 
+'''Functionality to cater to the blogs'''
 @login_required
 def blogs(request):
     return render(request, "front/blog_landing.html", {})
 
-# def create_blog(request):
-#     return render(request, "front/blog_create.html", {})
+def create_blog(request):
+    form = CreateCategoryForm()
+    blogForm = CreateBlogForm()
+    #ensure to implement ctx dictionary here
+    # ctx = {
+    #     'form' : form,
+    #     'Blog' : blogForm
+    # }
+    return render(request, "front/blog_create.html", {'form': form, 'form1': blogForm})
+
+def list_blogs(request):
+    '''Method to list all the available blogs'''
+    pass
+
+def edit_blogs(request):
+    '''Method to edit a particular blog'''
+    pass
+
+def delete_blog(request):
+    '''Method to delete an existing blog'''
+    pass
+
+# use discuss for comments
 
 
 def index(request):
