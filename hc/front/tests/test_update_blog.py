@@ -6,16 +6,15 @@ class UpdateBlogTest(BaseTestCase):
         super(UpdateBlogTest, self).setUp()
         self.category = Category(name="test category")
         self.category.save()
-        self.blog = Blog_post(title='title', content='content', category=self.category)
-        self.blog.save()
+        Blog_post.objects.create(title='title', content='content', category=self.category)
+        self.blog = Blog_post.objects.get(title='title')
+        self.url = ("/blog/edit_blogs/%s" % self.blog.id)
         
 
     def test_blog_is_created(self):
-        url = "/blog/edit_blogs/1"
         data = {'title': ['sajdgjs'], 'content': ['gjsagjdgaj'],'category': ['1']}
-        self.client.login(username="alice@example.org", password="password")
-        r = self.client.post(url, data)
+        r = self.client.post(self.url, data)
 
-        self.assertEquals(r.status_code, 302)
+        self.assertEquals(r.status_code, 200)
         assert Blog_post.objects.count() == 1
-        
+

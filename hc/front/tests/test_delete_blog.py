@@ -6,15 +6,12 @@ class DeleteBlogTest(BaseTestCase):
         super(DeleteBlogTest, self).setUp()
         self.category = Category(name="test category")
         self.category.save()
-        self.blog = Blog_post(title='title', content='content', category=self.category)
-        self.blog.save()
+        Blog_post.objects.create(title='title', content='content', category=self.category)
+        self.blog = Blog_post.objects.get(title='title')
+        self.url = ("/blog/delete_blog/%s" % self.blog.id)
         
 
-    def test_blog_is_deleted(self):
-        url = "/blog/delete_blog/1"
-        # data = {'title': ['sajdgjs'], 'content': ['gjsagjdgaj'],'category': ['1']}
-        self.client.login(username="alice@example.org", password="password")
-        r = self.client.post(url)
-
+    def test_blog_is_deleted(self):            
+        r = self.client.post(self.url)
         self.assertEquals(r.status_code, 302)
         assert Blog_post.objects.count() == 0

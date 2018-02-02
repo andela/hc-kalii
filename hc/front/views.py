@@ -159,7 +159,7 @@ def edit_blogs(request, pk):
             return redirect(read_blog, pk=blog.pk)
     else:
         form = CreateBlogForm()
-        return render(request, "front/blog_edit.html", {'blog': blog, 'categories': categories, 'form': form})
+    return render(request, "front/blog_edit.html", {'blog': blog, 'categories': categories, 'form': form})
     
 
 
@@ -168,7 +168,6 @@ def delete_blog(request, pk):
     '''Method to delete an existing blog'''
     deleted_blog = Blog_post.objects.get(pk=int(pk))
     Blog_post.objects.get(pk=int(pk)).delete()
-    Created = Blog_post.objects.all()
     return redirect(list_blog)
 
 
