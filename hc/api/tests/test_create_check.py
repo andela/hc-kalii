@@ -1,6 +1,6 @@
 import json
 
-from hc.api.models import Channel, Check
+from hc.api.models import Channel, Check, Department
 from hc.test import BaseTestCase
 
 
@@ -102,3 +102,18 @@ class CreateCheckTestCase(BaseTestCase):
 
         check = Check.objects.get(name='Foo')
         self.assertTrue(check.channel_set.filter(kind='slack').exists())
+
+    def test_can_be_assigned_department(self):
+        """ Test for assignment of departments """
+        department = Department(user=self.alice, name="Info Tech")
+        department.save()
+        response = self.post({
+            "api_key": "abc",
+            "name": "Foo",
+            "tags": "bar,baz",
+            "department_id": 1
+        })
+
+        self.assertEqual(response.status_code, 201)
+        check = Check.objects.get(name='Foo')
+        self.assertEqual(check.department.name, "Info Tech")
