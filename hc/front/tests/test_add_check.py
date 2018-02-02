@@ -14,7 +14,9 @@ class AddCheckTestCase(BaseTestCase):
 
     ### Test that team access works
     def test_team_access_works(self):
-        check = Check(user=self.alice, name="Team check")
+        bob = User.objects.get(email="bob@example.org")
+        check = Check(user=self.alice, name="Team check",
+                      member_access_allowed=True, member_access_id=bob.id)
         check.save()
         for email in ("alice@example.org", "bob@example.org"):
             self.client.login(username=email, password="password")

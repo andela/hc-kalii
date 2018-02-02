@@ -1,7 +1,7 @@
 import re
 
 from django.core import mail
-  
+
 from hc.test import BaseTestCase
 from hc.accounts.models import Member, Profile, User
 from hc.api.models import Check
@@ -13,7 +13,7 @@ class ProfileTestCase(BaseTestCase):
         """
         This is helper method invites a new team member
         """
-        form = {"invite_team_member": "1", "email": email}
+        form = {"invite_team_member": "1", "email": email, "check":"Cron A"}
         response = self.client.post("/accounts/profile/", form)
         self.assertEqual(response.status_code, 200)
 
@@ -99,8 +99,10 @@ class ProfileTestCase(BaseTestCase):
 
     def test_it_adds_team_member(self):
         self.client.login(username="alice@example.org", password="password")
+        check = Check(name="Cron A", user=self.alice)
+        check.save()
 
-        form = {"invite_team_member": "1", "email": "frank@example.org"}
+        form = {"invite_team_member": "1", "email": "frank@example.org", "check": "Cron A"}
         invitation = self.client.post("/accounts/profile/", form)
         assert invitation.status_code == 200
 
@@ -229,21 +231,26 @@ class ProfileTestCase(BaseTestCase):
         to reduce in turn
         """
         self.client.login(username="alice@example.org", password="password")
+        check = Check(name="Cron A", user=self.alice)
+        check.save()
         self._invite_member("glassman@example.org")
+        user = User.objects.filter(email="glassman@example.org")
 
         member = self._get_member("glassman@example.org")
         self.assertTrue(member.priority, "LOW")
 
     def test_update_priority(self):
         """
-        Ensure that the team member priority can be updated 
+        Ensure that the team member priority can be updated
         """
         self.client.login(username="alice@example.org", password="password")
+        check = Check(name="Cron A", user=self.alice)
+        check.save()
         self._invite_member("glassman@example.com")
         member = self._get_member("glassman@example.com")
         self.assertTrue(member.priority, "LOW")
 
-        form = {"update_priority": "1", "email": "glassman@example.com"}
+        form = {"update_priority": "1", "email": "glassman@example.com", "check": "Cron A"}
         response = self.client.post("/accounts/profile/", form)
         self.assertEqual(response.status_code, 200)
 
@@ -252,4 +259,4 @@ class ProfileTestCase(BaseTestCase):
 
 
 
-       
+

@@ -17,7 +17,8 @@ from hc.api.decorators import uuid_or_400
 from hc.api.models import DEFAULT_GRACE, DEFAULT_TIMEOUT, Channel, Check, Ping, Department
 from hc.front.forms import (AddChannelForm, AddWebhookForm, NameTagsForm,
                             TimeoutForm, DepartmentForm, CreateCategoryForm, CreateBlogForm)
-from hc.front.models import Category, Blog_post
+from hc.front.models import Check, Category, Blog_post
+                            TimeoutForm, DepartmentForm)
 
 
 # from itertools recipes:
@@ -39,15 +40,28 @@ def my_checks_helper(request):
 
 @login_required
 def my_checks(request):
-    """ Get and display all user checks """
-    checks = my_checks_helper(request)[0]
+    """ Get and display user checks """
+    # prepare checks depending on team leader or other user
+    checks = []
+    current_user_id = request.user.id
+    if request.team == request.user.profile:
+        owner_checks = Check.objects.filter(user=request.team.user).order_by("created")
+        checks = list(owner_checks)
+    else:
+        user_checks = Check.objects.filter(user=request.team.user, member_access_allowed=True,
+                                  member_access_id=current_user_id).order_by("created")
+        checks = list(user_checks)
+    
     if request.GET.get('department') and request.GET.get('department') != "all":
-        department = int(request.GET.get('department'))
+        try:
+            department = int(request.GET.get('department'))
+        except ValueError:
+            raise Http404("Department specified cannot be found.")
     else:
         department = "all"
     if department != "all":
         checks = [check for check in checks if check.department_id == department]
-    depts = Department.objects.all()
+    depts = Department.objects.filter(user=request.team.user)
     counter = Counter()
     down_tags, grace_tags = set(), set()
     for check in checks:
@@ -62,7 +76,6 @@ def my_checks(request):
                 down_tags.add(tag)
             elif check.in_grace_period():
                 grace_tags.add(tag)
-
     ctx = {
         "page": "checks",
         "checks": checks,
