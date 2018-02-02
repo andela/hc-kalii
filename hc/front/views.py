@@ -108,6 +108,7 @@ def blogs(request):
     return render(request, "front/blog_landing.html", {})
 
 def create_blog(request):
+    ''' Method to create a blog '''
     form = CreateCategoryForm(request.POST)
     blogForm = CreateBlogForm(request.POST)
     if form.is_bound and form.is_valid():
@@ -127,17 +128,24 @@ def create_blog(request):
     return render(request, "front/blog_create.html", {'form': form, 'form1': blogForm})
 
 def read_blog(request, pk):
-    '''Method to list all the freshly created blogs and link to other functionality'''
+    '''
+    Method to list all the freshly created blogs and link to other 
+    functionality
+    '''
     blog = Blog_post.objects.get(pk=pk)
     return render(request, "front/read_blog.html", {'blog': blog})
 
 def list_blog(request):
-    '''Method to list all blogs'''
+    '''
+    Method to list all blogs
+    '''
     blogs = Blog_post.objects.all()
     return render(request, "front/list_blog.html", {'blogs': blogs})
 
 def edit_blogs(request, pk):
-    '''Method to edit a particular blog'''
+    '''
+    Method to edit a particular blog
+    '''
     blog = Blog_post.objects.get(pk=int(pk))
     categories = Category.objects.all()
     if request.method == "POST":
@@ -147,12 +155,9 @@ def edit_blogs(request, pk):
             blog.content = form.cleaned_data['content']
             blog.category = form.cleaned_data['category']
             blog.save()
-            print ('/////////', blog.pk)
             return redirect(read_blog, pk=blog.pk)
     else:
         form = CreateBlogForm()
-        print ('/////////', blog.pk)
-
         return render(request, "front/blog_edit.html", {'blog': blog, 'categories': categories, 'form': form})
     
 

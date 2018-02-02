@@ -34,6 +34,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'compressor',
     'djmail',
+    # 'disqus',
 
     'hc.accounts',
     'hc.api',

@@ -33,17 +33,4 @@ class Blog_post(models.Model):
         '''Representation of string output from the database'''
         return self.title
 
-class Comment(models.Model):
-    '''
-    This model handles caters to the ability of users to add
-    comments to users blog posts
-    '''
-    comment = models.TextField()
-    blog = models.ForeignKey(Blog_post, blank=True, null=True)
-    user = models.ForeignKey(User, blank=True, null=True,
-                            on_delete=models.CASCADE)
-    published = models.DateTimeField(default=timezone.now)
-
-    def __str__(self):
-        return self.comment
 
