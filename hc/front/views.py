@@ -116,6 +116,7 @@ def create_blog(request):
         cat = Category(name=name)
         cat.save()
     elif blogForm.is_bound and blogForm.is_valid():
+        print ('.......', request.POST)
         title = blogForm.cleaned_data['title']
         content = blogForm.cleaned_data['content']
         published = timezone.now()
@@ -168,7 +169,7 @@ def delete_blog(request, pk):
     deleted_blog = Blog_post.objects.get(pk=int(pk))
     Blog_post.objects.get(pk=int(pk)).delete()
     Created = Blog_post.objects.all()
-    return redirect("hc-edit_blog")
+    return redirect(list_blog)
 
 
 
