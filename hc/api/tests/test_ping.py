@@ -1,13 +1,14 @@
 from django.test import Client, TestCase
 from django.urls import reverse
 from hc.api.models import Check, Ping
+from hc.test import BaseTestCase
 
-
-class PingTestCase(TestCase):
+class PingTestCase(BaseTestCase):
 
     def setUp(self):
         super(PingTestCase, self).setUp()
-        self.check = Check.objects.create()
+        self.check = Check(name="Test Check", user=self.alice)
+        self.check.save()
 
     def test_it_works(self):
         r = self.client.get("/ping/%s/" % self.check.code)
@@ -99,7 +100,8 @@ class PingTestCase(TestCase):
     def test_it_flags_check_that_runs_to_often(self):
         """checks should not run to often"""
         #Create test_check
-        test_check = Check.objects.create()
+        test_check = self.check
+        test_check.save()
         self.assertEqual(test_check.status, "new")
         #ping check to change it's status to up
         response = self.client.get(
