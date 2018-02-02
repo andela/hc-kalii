@@ -52,12 +52,15 @@ def my_checks(request):
         checks = list(user_checks)
     
     if request.GET.get('department') and request.GET.get('department') != "all":
-        department = int(request.GET.get('department'))
+        try:
+            department = int(request.GET.get('department'))
+        except ValueError:
+            raise Http404("Department specified cannot be found.")
     else:
         department = "all"
     if department != "all":
         checks = [check for check in checks if check.department_id == department]
-    depts = Department.objects.all()
+    depts = Department.objects.filter(user=request.team.user)
     counter = Counter()
     down_tags, grace_tags = set(), set()
     for check in checks:
