@@ -35,6 +35,10 @@ urlpatterns = [
     url(r'^checks/add/$', views.add_check, name="hc-add-check"),
     url(r'^checks/([\w-]+)/', include(check_urls)),
     url(r'^integrations/', include(channel_urls)),
+    url(r'^departments/$', views.departments, name="hc-departments"),
+    url(r'^departments/add/$', views.add_department, name="hc-add-department"),
+    url(r'^departments/edit/([\d]+)/$', views.edit_department, name="hc-edit-department"),
+    url(r'^departments/remove/([\d]+)/$', views.remove_department, name="hc-remove-department"),
 
     url(r'^docs/$', views.docs, name="hc-docs"),
     url(r'^docs/api/$', views.docs_api, name="hc-docs-api"),
