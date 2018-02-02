@@ -17,7 +17,7 @@ from hc.api.decorators import uuid_or_400
 from hc.api.models import DEFAULT_GRACE, DEFAULT_TIMEOUT, Channel, Check, Ping
 from hc.front.forms import (AddChannelForm, AddWebhookForm, NameTagsForm,
                             TimeoutForm, CreateCategoryForm, CreateBlogForm)
-
+from hc.front.models import Category, Blog_post
 
 # from itertools recipes:
 def pairwise(iterable):
@@ -108,13 +108,12 @@ def blogs(request):
     return render(request, "front/blog_landing.html", {})
 
 def create_blog(request):
-    form = CreateCategoryForm()
-    blogForm = CreateBlogForm()
-    #ensure to implement ctx dictionary here
-    # ctx = {
-    #     'form' : form,
-    #     'Blog' : blogForm
-    # }
+    form = CreateCategoryForm(request.POST)
+    blogForm = CreateBlogForm(request.POST)
+    if form.is_valid():
+        name = form.cleaned_data['name']
+        cat = Category(name=name)
+        cat.save()
     return render(request, "front/blog_create.html", {'form': form, 'form1': blogForm})
 
 def list_blogs(request):
