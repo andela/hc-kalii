@@ -12,6 +12,8 @@ from django.urls import reverse
 from django.utils import timezone
 from hc.api import transports
 from hc.lib import emails
+from hc.accounts.models import Member
+
 
 STATUSES = (
     ("up", "Up"),
@@ -39,6 +41,23 @@ PO_PRIORITIES = {
 }
 
 
+class Department(models.Model):
+    """ Team department for job categorization """
+
+    user = models.ForeignKey(User)
+    name = models.CharField(max_length=100)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+    def to_dict(self):
+        result = {
+            "name": self.name,
+            "created": self.created.isoformat()
+        }
+        return result
+
 class Check(models.Model):
 
     class Meta:
@@ -60,6 +79,8 @@ class Check(models.Model):
     nag_after = models.DateTimeField(null=True, blank=True, editable=True)
     nag_status = models.BooleanField(default=True)
     often = models.BooleanField(default=False)
+    department = models.ForeignKey(Department, blank=True, null=True)
+    is_alerted = models.BooleanField(default=False)
 
     def name_then_code(self):
         if self.name:
@@ -78,7 +99,12 @@ class Check(models.Model):
 
     def send_often_status(self):
         self.status = "often"
-        self.send_alert()
+        members = Member.objects.filter(
+            team=self.user.profile).all()
+        for member in members:
+            if member.priority == "LOW":
+                self.send_alert()
+            continue
         self.status = "up"
 
     def send_alert(self):
