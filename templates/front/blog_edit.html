@@ -12,11 +12,20 @@
             </li>
 
             <li {% if page == 'blogs' %} class="active" {% endif %}>
-                <a href="{% url 'hc-edit_blog' %}">Edit Blog</a>
+                <a href="{% url 'hc-edit_blog' %}">List Blogs</a>
             </li>
     </ul>
     
 </div>
+{% if created %}
+    <ul>
+    {% for item in created %}
+        <li><a href="/blog/read_blog/{{item.pk}}">{{ item.title }} </a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No Blogs exist.</p>
+{% endif %}
 
 {% endblock %}
 

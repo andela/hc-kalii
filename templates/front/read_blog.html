@@ -18,6 +18,16 @@
     
 </div>
 
+{% if blog %}
+    <p><strong>Blog Title: </strong>{{blog.title}}</p>
+    <p><strong>Blog Content: </strong>{{blog.content}}</p>
+    <p><strong> Date Published: </strong>{{blog.published}} </p>
+    <p><strong>Blog Category: </strong>{{blog.category}}</p>
+
+{% else %}
+    <p>Nothing was created.</p>
+{% endif %}
+
 {% endblock %}
 
 {% block scripts %}

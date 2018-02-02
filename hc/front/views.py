@@ -123,20 +123,31 @@ def create_blog(request):
         blog = Blog_post(title=title, content=content, published=published,
                         category=category, user=user)
         blog.save()
-        
+        return redirect(read_blog, pk=blog.pk)
     return render(request, "front/blog_create.html", {'form': form, 'form1': blogForm})
 
-def list_blogs(request):
-    '''Method to list all the available blogs'''
-    pass
+def read_blog(request, pk):
+    blog = Blog_post.objects.get(pk=pk)
+    return render(request, "front/read_blog.html", {'blog': blog})
 
 def edit_blogs(request):
     '''Method to edit a particular blog'''
-    pass
+    Created = Blog_post.objects.all()
+    blogForm = CreateBlogForm(request.POST)
+    if blogForm.is_bound and blogForm.is_valid():
+        title = blogForm.cleaned_data['title']
+        content = blogForm.cleaned_data['content']
+        published = timezone.now()
+        category = blogForm.cleaned_data['category']
+        user = request.user
+        blog = Blog_post(title=title, content=content, published=published,
+                        category=category, user=user)
+        blog.save()
+    return render(request, "front/blog_edit.html", {'created': Created, 'form': blogForm})
 
-def delete_blog(request):
-    '''Method to delete an existing blog'''
-    pass
+# def delete_blog(request):
+#     '''Method to delete an existing blog'''
+#     pass
 
 # use discuss for comments
 
