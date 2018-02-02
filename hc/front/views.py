@@ -17,7 +17,7 @@ from hc.api.decorators import uuid_or_400
 from hc.api.models import DEFAULT_GRACE, DEFAULT_TIMEOUT, Channel, Check, Ping, Department
 from hc.front.forms import (AddChannelForm, AddWebhookForm, NameTagsForm,
                             TimeoutForm, DepartmentForm, CreateCategoryForm, CreateBlogForm)
-from hc.front.models import Check, Category, Blog_post
+from hc.front.models import Category, Blog_post
 
 
 # from itertools recipes:
