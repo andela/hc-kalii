@@ -110,10 +110,20 @@ def blogs(request):
 def create_blog(request):
     form = CreateCategoryForm(request.POST)
     blogForm = CreateBlogForm(request.POST)
-    if form.is_valid():
+    if form.is_bound and form.is_valid():
         name = form.cleaned_data['name']
         cat = Category(name=name)
         cat.save()
+    elif blogForm.is_bound and blogForm.is_valid():
+        title = blogForm.cleaned_data['title']
+        content = blogForm.cleaned_data['content']
+        published = timezone.now()
+        category = blogForm.cleaned_data['category']
+        user = request.user
+        blog = Blog_post(title=title, content=content, published=published,
+                        category=category, user=user)
+        blog.save()
+        
     return render(request, "front/blog_create.html", {'form': form, 'form1': blogForm})
 
 def list_blogs(request):

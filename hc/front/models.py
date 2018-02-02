@@ -12,7 +12,7 @@ class Category(models.Model):
 
     name = models.CharField(max_length=100)
 
-    def ___str__(self):
+    def __str__(self):
         return self.name
 
 class Blog_post(models.Model):
@@ -29,7 +29,7 @@ class Blog_post(models.Model):
                             null=True, 
                             on_delete= models.CASCADE)
 
-    def ___str__(self):
+    def __str__(self):
         '''Representation of string output from the database'''
         return self.title
 
