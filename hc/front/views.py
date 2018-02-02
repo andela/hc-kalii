@@ -16,8 +16,8 @@ from django.utils.six.moves.urllib.parse import urlencode
 from hc.api.decorators import uuid_or_400
 from hc.api.models import DEFAULT_GRACE, DEFAULT_TIMEOUT, Channel, Check, Ping, Department
 from hc.front.forms import (AddChannelForm, AddWebhookForm, NameTagsForm,
-                            TimeoutForm, DepartmentForm)
-from hc.api.models import Check
+                            TimeoutForm, DepartmentForm, CreateCategoryForm, CreateBlogForm)
+from hc.front.models import Category, Blog_post
 
 
 # from itertools recipes:
@@ -125,6 +125,75 @@ def _welcome_check(request):
         request.session["welcome_code"] = str(check.code)
 
     return check
+
+'''Functionality to cater to the blogs'''
+@login_required
+def blogs(request):
+    return render(request, "front/blog_landing.html", {})
+
+def create_blog(request):
+    ''' Method to create a blog '''
+    form = CreateCategoryForm(request.POST)
+    blogForm = CreateBlogForm(request.POST)
+    if form.is_bound and form.is_valid():
+        name = form.cleaned_data['name']
+        cat = Category(name=name)
+        cat.save()
+    elif blogForm.is_bound and blogForm.is_valid():
+        print ('.......', request.POST)
+        title = blogForm.cleaned_data['title']
+        content = blogForm.cleaned_data['content']
+        published = timezone.now()
+        category = blogForm.cleaned_data['category']
+        user = request.user
+        blog = Blog_post(title=title, content=content, published=published,
+                        category=category, user=user)
+        blog.save()
+        return redirect(read_blog, pk=blog.pk)
+    return render(request, "front/blog_create.html", {'form': form, 'form1': blogForm})
+
+def read_blog(request, pk):
+    '''
+    Method to list all the freshly created blogs and link to other 
+    functionality
+    '''
+    blog = Blog_post.objects.get(pk=pk)
+    return render(request, "front/read_blog.html", {'blog': blog})
+
+def list_blog(request):
+    '''
+    Method to list all blogs
+    '''
+    blogs = Blog_post.objects.all()
+    return render(request, "front/list_blog.html", {'blogs': blogs})
+
+def edit_blogs(request, pk):
+    '''
+    Method to edit a particular blog
+    '''
+    blog = Blog_post.objects.get(pk=int(pk))
+    categories = Category.objects.all()
+    if request.method == "POST":
+        form = CreateBlogForm(request.POST)
+        if form.is_valid():
+            blog.title = form.cleaned_data['title']
+            blog.content = form.cleaned_data['content']
+            blog.category = form.cleaned_data['category']
+            blog.save()
+            return redirect(read_blog, pk=blog.pk)
+    else:
+        form = CreateBlogForm()
+    return render(request, "front/blog_edit.html", {'blog': blog, 'categories': categories, 'form': form})
+    
+
+
+
+def delete_blog(request, pk):
+    '''Method to delete an existing blog'''
+    deleted_blog = Blog_post.objects.get(pk=int(pk))
+    Blog_post.objects.get(pk=int(pk)).delete()
+    return redirect(list_blog)
+
 
 
 def index(request):

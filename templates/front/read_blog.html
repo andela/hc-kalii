@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load compress staticfiles %}
+
+{% block title %}My Checks - healthchecks.io{% endblock %}
+
+
+{% block content %}
+<div id="navbar" class="navbar-collapse collapse">
+    <ul id="nav-main-sections" class="nav navbar-nav">
+            <li {% if page == 'blogs' %} class="active" {% endif %}>
+                <a href="{% url 'hc-create_blog' %}">Create Blog</a>
+            </li>
+
+            <li {% if page == 'blogs' %} class="active" {% endif %}>
+                <a href="{% url 'hc-list_blog' %}">List Blogs</a>
+            </li>
+    </ul>
+    
+</div>
+
+{% if blog %}
+    <div>
+    <p><strong>Blog Title: </strong>{{blog.title}}</p>
+    <p><strong>Blog Content: </strong>{{blog.content}}</p>
+    <p><strong> Date Published: </strong>{{blog.published}} </p>
+    <p><strong>Blog Category: </strong>{{blog.category}}</p>
+    <div class="row">
+            
+            <div class="col-sm-4">
+                    <a class="btn btn-lg btn-success" href="{% url 'hc-edit_blog' blog.pk %}" role="button">Edit Blog</a>
+            </div>
+            <div class="col-sm-4">
+                    <a class="btn btn-lg btn-danger" href="{% url 'hc-delete_blog' blog.pk%}" role="button">Delete Blog</a>
+            </div>
+            <div id="disqus_thread"></div>
+            <script>
+
+            /**
+            *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+            *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+            /*
+            var disqus_config = function () {
+            this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+            this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+            };
+            */
+            (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://hc-kalii-herokuapp-com.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+            })();
+            </script>
+            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </div>
+    </div>
+
+{% else %}
+    <p>Nothing was created.</p>
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+{% compress js %}
+<script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/nouislider.min.js' %}"></script>
+<script src="{% static 'js/clipboard.min.js' %}"></script>
+<script src="{% static 'js/checks.js' %}"></script>
+{% endcompress %}
+{% endblock %}

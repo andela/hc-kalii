@@ -1,4 +1,5 @@
 from django import forms
+from hc.front.models import Category, Blog_post
 from hc.api.models import Channel, Department
 
 
@@ -39,6 +40,19 @@ class AddChannelForm(forms.ModelForm):
     def clean_value(self):
         value = self.cleaned_data["value"]
         return value.strip()
+
+class CreateCategoryForm(forms.ModelForm):
+    '''form to cater for the creation of a category for a blog'''
+    class Meta:
+        model = Category
+        fields = ['name']
+
+class CreateBlogForm(forms.ModelForm):
+    '''Form to cater to the creation of Blog entires'''
+    class Meta:
+        model = Blog_post
+        fields = ['title', 'content', 'category']
+
 
 
 class AddWebhookForm(forms.Form):

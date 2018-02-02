@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load compress staticfiles %}
+
+{% block title %}My Checks - healthchecks.io{% endblock %}
+
+
+{% block content %}
+<div id="navbar" class="navbar-collapse collapse">
+    <ul id="nav-main-sections" class="nav navbar-nav">
+            <li {% if page == 'blogs' %} class="active" {% endif %}>
+                <a href="{% url 'hc-create_blog' %}">Create Blog</a>
+            </li>
+
+            <li {% if page == 'blogs' %} class="active" {% endif %}>
+                <a href="{% url 'hc-list_blog' %}">List Blog</a>
+            </li>
+    </ul>
+</div>
+    <button type="button" class="btn btn-success" data-toggle="collapse" data-target="#demo">Create Category</button>
+    <div id="demo" class="collapse">
+        <form method="POST" class="post-form">{% csrf_token %}
+            <h1>Category Name </h1>
+            {{ form.as_p }} 
+            <button type="submit" class="save btn btn-default">Create</button>
+        </form>
+    </div>
+
+    <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#demo1">Create Blog</button>
+    <div id="demo1" class="collapse">
+        <form method="POST" class="post-form">{% csrf_token %}
+            <h1>Blog Particulars</h1>
+            {{ form1.as_p}}
+    
+            <button type="submit" class="save btn btn-default">Save Blog</button>
+        </form>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{% compress js %}
+<script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/nouislider.min.js' %}"></script>
+<script src="{% static 'js/clipboard.min.js' %}"></script>
+<script src="{% static 'js/checks.js' %}"></script>
+{% endcompress %}
+{% endblock %}
